@@ -93,6 +93,10 @@ section{
   margin-bottom: 10px;
   text-align: center;
 }
+.maindescription h2 span{
+  font-weight: bold;
+  font-size: 1.2em;
+}
 
 .entries {
   width: 23%;
@@ -189,4 +193,135 @@ margin-top: 10px;
 }
 .adhocemail{
   padding-top: 10%;
+}
+.dropdown{
+  display: inline-block;
+}
+.profile-content {
+  display: none;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 110px;
+  border: 2px solid #f4ad42;
+  z-index: 1;
+}
+.profile-content a {
+  color: whitesmoke;
+  padding: 15px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+  margin-top: 15px;
+}
+
+.dropdown:hover .profile-content {
+  display: block;
+}
+.form-entry{
+  width: 90%;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 30px;
+}
+.form-entry label{
+  width: 20%;
+  float: left;
+  height: 10px;
+  font-size: 18px;
+  text-align: right;
+  padding: 10px;
+  margin-top: 10px;
+}
+.entrytitle{
+  width: 75%;
+  padding: 20px;
+  background: transparent;
+  color: white;
+  border: 2px solid #f4ad42;
+  border-radius: 5px;
+  letter-spacing: 1px;
+}
+.entrytextarea{
+  width: 75%;
+  padding: 20px;
+  margin-top: 20px;
+  font-family: sans-serif;
+  letter-spacing: 1px;
+  background: transparent;
+  color: white;
+  border: 2px solid #f4ad42;
+  border-radius: 5px;
+}
+.savebutton{
+  margin: 20px;
+  margin-left: 40%;
+  width: 20%;
+  border: 2px solid #f4ad42;
+  background: transparent;
+  color: #f4ad42;
+  padding: 10px;
+}
+.clearbutton{
+  margin: 20px;
+
+  width: 20%;
+  border: 2px solid #f4ad42;
+  background: transparent;
+  color: #f4ad42;
+  padding: 10px;
+}
+
+.searchentry{
+  width: 100%;
+  min-height: 400px;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.searchentry p{
+  padding: 30px 20px ;
+  float: left;
+  width: 20%;
+}
+.dateselect{
+  width: 20%;
+  padding: 10px 20px;
+  background: transparent;
+  color: #f4ad42;
+  border: 1px solid #f4ad42;
+  border-radius: 5px;
+  margin: 20px 30px;
+
+}
+.searchentry button{
+  width: 20%;
+  padding: 10px;
+  background: transparent;
+  color: #f4ad42;
+  border: 1px solid #f4ad42;
+  border-radius: 5px;
+}
+
+.allentries::before{
+  float: none;
+}
+
+.allentries table{
+  width: 100%;
+}
+.allentries table th, td{
+  width: 22%;
+  border: 1px dashed #f4ad42;
+  padding: 8px;
+
+}
+/* .allentries table tr td span{
+  width: 20%;
+  border: 1px solid red;
+} */
+
+.bottomborder{
+  border-bottom: 1px ridge #f4ad42;
+  margin-top: 20px;
+}
+.reminder{
+  margin-top: 25px;
 }
