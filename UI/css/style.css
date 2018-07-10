@@ -1,0 +1,192 @@
+* {
+  box-sizing: border-box;
+
+  margin: 0;
+}
+
+body{
+  padding: 0;
+  background: linear-gradient(rgba(23, 0, 44, 0.9), rgba(23, 0, 44, 0.9)), url('../images/diary1.jpg') black no-repeat center fixed;
+  color: white;
+  letter-spacing: 2px;
+  font-family: 'oxygen', 'sans-serif';
+
+}
+
+
+.container{
+  width: 80%;
+  margin: 0 auto;
+}
+
+header{
+  border: 1px solid #f4ad42;
+  background: rgba(0, 0, 0, 0.5);
+  height: 70px;
+  padding-top: 10px;
+  
+}
+
+.logo{
+  width: 40%;
+  float: left;
+  
+}
+header h1 a{
+  color: #f4ad42;
+}
+header a{
+  color: #fff;
+  text-decoration: none;
+}
+nav{
+  width: 60%;
+  overflow: hidden;
+}
+nav ul{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+nav ul li {
+float: right;
+padding: 10px 5px; ;
+width: 100px;
+text-align: center;
+margin-left: 10px;
+  
+}
+
+.aborder{
+  border: 1px solid #f4ad42;
+}
+section{
+  min-height:500px;
+  overflow: hidden;
+}
+.desc{
+  margin-top: 40px;
+  min-height: 200px;
+  border: 1px dashed #f4ad42;
+  background: rgba(0, 0, 0, 0.3);
+}
+.desc p{
+  padding: 15px;
+  line-height: 40px;
+  text-align: center;
+  font-size: 18px;
+}
+.desc p span{
+  font-weight: bold;
+  font-size: 28px;
+}
+.desc button{
+  width: 20%;
+  background: transparent;
+  color: #f4ad42;
+  border: 1px solid #f4ad42;
+  padding: 10px 0;
+  margin: 10px 40%;
+}
+.maindescription h2{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.entries {
+  width: 23%;
+  margin: 0 10px;
+ float: left;
+ border: 1px solid #f4ad42;
+ min-height: 200px;
+}
+
+.title{
+  padding: 10px;
+  font-weight: bold;
+  text-align: center;
+  color: #f4ad42;
+}
+.description{
+  padding: 0 10px 10px 10px;
+}
+.entries button{
+  padding: 2px 5px;
+  margin-left: 50%;
+  color: #f4ad42;
+  border: 1px solid #f4ad42;
+  background: transparent;
+  width: 40%;
+}
+
+footer{
+  margin-top: 50px;
+  background: rgba(0, 0, 0, 0.5);
+  min-height: 50px;
+}
+footer p{
+  font-size: 10px;
+  text-align: center; 
+  padding-top: 10px;
+}
+.myform{
+ background: rgba(0, 0, 0, 0.5);
+ margin: 20px auto;
+ width: 80%;
+ min-height: 300px;
+
+}
+.logindesc{
+  text-align: center;
+  width: 60%;
+  margin: 20px auto;
+}
+.myform label{
+width: 30%;
+float: left;
+height: 10px;
+font-size: 18px;
+text-align: right;
+padding: 10px;
+margin-top: 10px;
+}
+.forminput{
+  width: 60%;
+  background: transparent;
+  border: 2px solid #f4ad42;
+  padding: 10px;
+  margin: 15px 5px;
+  color: white;
+  border-radius: 5px;
+}
+::placeholder{
+  color: wheat;
+  opacity: 1;
+}
+
+.submit{
+  width: 25%;
+  color: white;
+  background: transparent;
+  border: 2px solid #f4ad42;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 0 50%;
+  letter-spacing: 2px;
+
+}
+
+.myform p{
+  font-size: 10px;
+  margin: 20px 0 20px 30%;
+  padding-bottom: 30px;
+
+}
+.myform p a{
+  text-decoration: none;
+  color: #f4ad42;
+}
+.adhocemail{
+  padding-top: 10%;
+}
