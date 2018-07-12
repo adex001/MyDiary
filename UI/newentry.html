@@ -9,24 +9,24 @@
   <title>Add an entry</title>
 </head>
 <body>
-  <header>
-    <div class="container">
-      <h1 class="logo"><a href="./dashboard.html">My Diary</a></h1>
-      <nav>
-        <ul>
-          <li class="aborder"><a href="../index.html">Signout</a></li>
-          <li class="aborder dropdown">
-              <a href="javascript:void(0)" class="profiledropdown">Profile</a>
-              <div class="profile-content">
-                <a href="./newentry.html">New entry</a>
-                <a href="#">View entries</a>
-                <a href="#">Settings</a>
-              </div>
-          </li>
-        </ul>
-      </nav>
-    </div>
-  </header>
+    <header>
+        <div class="container">
+          <h1 class="logo"><a href="./dashboard.html">My Diary</a></h1>
+          <nav>
+            <ul>
+              <li class="aborder"><a href="../index.html">Signout</a></li>
+              <li class="aborder dropdown">
+                  <a href="javascript:void(0)" class="profiledropdown">Profile</a>
+                  <div class="profile-content">
+                    <a href="./newentry.html">New entry</a>
+                    <a href="./entries.html">View entries</a>
+                    <a href="./profile.html">Settings</a>
+                  </div>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </header>
   <section>
     <div class="bigwelcome">
       <div class="container">
@@ -35,6 +35,12 @@
           <form class="form-entry" method="POST" action="#">
             <label>Title</label> <input type="text" placeholder="Enter entry title" class="entrytitle"><br>
             <label>Entry</label>  <textarea rows="20" cols="80" placeholder="Enter story here" class="entrytextarea"></textarea><br>
+            <p>entry visibility is private by default</p>
+            <select class="select">
+              <option disabled>Visibility</option>
+              <option>Private</option>
+              <option>Public</option>
+            </select>
             <button class="savebutton">Save</button> <button class="clearbutton">Clear</button>
           </form>
         </div>

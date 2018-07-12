@@ -30,17 +30,54 @@
   <section>
     <div class="bigwelcome">
       <div class="container">
-        <div class="maindescription">
+        <div class="maindescription ">
           <h2> Profile Settings </h2>
           <!--  Profile settings --> 
           
           <div class="bottomborder"></div>
+          
+
+          <div class="reminder backgroundme">
+            <h3>Reminder Settings</h3>
+
+            <h4>Set daily reminder time: <input type="time" value="" class="time"> <button>set</button></h4>
+          </div>
+
+          <div class="bottomborder"></div>
+          
+
+          <h2>Edit Profile</h2>
+          <!-- User Settings -->
+          <div class="bottomborder"></div>
+
+          <div class="useredit">
+            <form class="myform backgroundme" action="dashboard.html" method="GET">
+              <label for="firstname">Firstname </label><input type="text" class="forminput" value="Mary" placeholder="Mary"><br>
+              <label for="lastname">Lastname</label> <input type="text" class="forminput" value="Georgia" placeholder="Georgia"> <br>
+              <label for="sex">Sex</label> <select name="sex" id="sex" class="forminput select">
+                <option>Female</option>
+                <option>Male</option>
+                <option>Rather not say</option>
+              </select> 
+              <input type="submit" class="submit" id="updatebutton" value="update">   
+            </form>
+          </div>
+
+          <div class="bottomborder"></div>
+
+          <h2>Diary entries:</h2>
+          <!-- User Settings -->
+          <div class="bottomborder"></div>
+          <div class="totalentry backgroundme">
+            <h3>Total entries: <span>35</span></h3>
+          </div>
+          <div class="bottomborder"></div>
+          </div> <!-- end of maindescription div --> 
+
         </div>
 
-        <div class="reminder">
-          <h3>Reminder Settings</h3>
-        </div>
       </div>
+      
   
     </div>
 

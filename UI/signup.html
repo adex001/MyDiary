@@ -25,10 +25,11 @@
       <div class="container">
         <h2 class="logindesc">Register Diary</h2>
         <form class="myform" action="dashboard.html" method="GET">
-          <label for="firstname">Firstname </label><input type="text" class="forminput" value="" placeholder="Mary"><br>
+          <label for="firstname">Firstname </label><input type="text" class="forminput" value="" placeholder="Mary" required><br>
           <label for="lastname">Lastname</label> <input type="text" class="forminput" value="" placeholder="Georgia"> <br>
-          <label for="user">Email or Username </label><input type="text" class="forminput" value="" placeholder="abc123"><br>
-          <label for="password">Password</label> <input type="password" class="forminput" value="" placeholder="enter password"> <br>
+          <label for="user">Username </label><input type="text" class="forminput" value="" placeholder="abc123" required><br>
+          <label for="user">Email Address </label><input type="email" class="forminput" value="" placeholder="abc123@abc.com" required><br>
+          <label for="password">Password</label> <input type="password" class="forminput" value="" placeholder="enter password" required> <br>
           <label for="password2">Re-enter Password</label> <input type="password" class="forminput" value="" placeholder="re-enter password" > <br>
           <input type="submit" class="submit" id="loginbutton" value="register">
           <p>Already registered? <span><a href="./signin.html">sign in</a></span></p>
