@@ -643,7 +643,47 @@ padding: 15px;
       margin: 0 20%;
     }
 
-
+    .holover div{
+      margin-left: 60%;
+    }
+   .holover div span {
+      display: block;
+      width: 70%;
+      right: 0;
+      height: 2px;
+      background-color: #f4ad42;
+      margin: 6px 0 6px 6px;
+  }
+  .aborder{
+    display: none;
+    
+  }
+  .nav-content{
+      display: none;
+      position: absolute;
+      right: 0;
+      background-color: transparent;
+      min-width: 100px;
+      margin-top: 10px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 1;
+  }
+  .nav-content a {
+    color: white;
+    padding: 12px 16px;
+    background: rgba(23, 0, 44, 0.9);
+    text-decoration: none;
+    display: block;
+  }
+  .nav-content a:hover {
+    background-color: grey;
+  }
+  .holover:hover .nav-content {
+    display: block;
+  }
+  .holover:hover .holover {
+    background-color: grey;;
+  }
 
 
 
@@ -828,6 +868,47 @@ padding: 15px;
       margin: 0 20%;
     }
 
+    .holover div{
+      margin-left: 60%;
+    }
+   .holover div span {
+      display: block;
+      width: 70%;
+      right: 0;
+      height: 2px;
+      background-color: #f4ad42;
+      margin: 6px 0 6px 6px;
+  }
+  .aborder{
+    display: none;
+    
+  }
+  .nav-content{
+      display: none;
+      position: absolute;
+      right: 0;
+      background-color: transparent;
+      min-width: 100px;
+      margin-top: 10px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 1;
+  }
+  .nav-content a {
+    color: white;
+    padding: 12px 16px;
+    background: rgba(23, 0, 44, 0.9);
+    text-decoration: none;
+    display: block;
+  }
+  .nav-content a:hover {
+    background-color: grey;
+  }
+  .holover:hover .nav-content {
+    display: block;
+  }
+  .holover:hover .holover {
+    background-color: grey;;
+  }
 
 }
 
@@ -1008,6 +1089,50 @@ padding: 15px;
       margin: 0 20%;
     }
 
+    .holover{
+      display: none;
+    }
+    .holover div{
+      margin-left: 60%;
+    }
+   .holover div span {
+      display: block;
+      width: 70%;
+      right: 0;
+      height: 2px;
+      background-color: #f4ad42;
+      margin: 6px 0 6px 6px;
+  }
+  .aborder{
+    display: block;
+    
+  }
+  .nav-content{
+      display: block;
+      position: absolute;
+      right: 0;
+      background-color: transparent;
+      min-width: 100px;
+      margin-top: 10px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 1;
+  }
+  .nav-content a {
+    color: white;
+    padding: 12px 16px;
+    background: rgba(23, 0, 44, 0.9);
+    text-decoration: none;
+    display: block;
+  }
+  .nav-content a:hover {
+    background-color: grey;
+  }
+  .holover:hover .nav-content {
+    display: block;
+  }
+  .holover:hover .holover {
+    background-color: grey;;
+  }
 
 
 }
@@ -1015,6 +1140,9 @@ padding: 15px;
 
 /* TABLET LANDSCAPE / DESKTOP */
 @media (min-width: 1000px) and (max-width:1024px)  {
+  .holover{
+    display: none;
+  }
   body{
     padding: 0;
     background: linear-gradient(rgba(23, 0, 44, 0.9), rgba(23, 0, 44, 0.9)), url('../images/diary1.jpg') black no-repeat center fixed;
@@ -1474,4 +1602,12 @@ padding: 15px;
     border: 1px solid #f4ad42;
   
   }
-}   
+}
+@media (min-width: 1024px){
+  .holover{
+    display: none;
+  }
+  .entries{
+    width: 22%;
+  }
+}
