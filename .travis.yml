@@ -4,8 +4,20 @@ node_js: "8.11.1"
 notifications:
   email: false
 
+env:
+  global:
+    - CC_TEST_REPORTER_ID=6e43395681c5d23c76291514056aadb245aa3c01b3f54ce41b838c5fb6e2ce87
+
+before_script:
+  - npm install nyc
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+
 script:
   - nyc --reporter=lcov --reporter=text-lcov npm test
 
+
 after_script:
   - npm run coverage
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
