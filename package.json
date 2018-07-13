@@ -2,10 +2,14 @@
   "name": "mydiary",
   "version": "1.0.0",
   "description": "diary, ",
-  "main": "server/app.js",
+  "main": "/server/app.js",
   "scripts": {
+    "babel-node": "babel-node --presets=latest",
+    "start": "nodemon --exec npm run babel-node -- ./server/app.js",
+    "build": "babel server -d src",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+
   "repository": {
     "type": "git",
     "url": "git+https://github.com/adex001/MyDiary.git"
@@ -18,5 +22,10 @@
   "homepage": "https://github.com/adex001/MyDiary#readme",
   "dependencies": {
     "express": "^4.16.3"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-latest": "^6.24.1",
+    "nodemon": "^1.18.1"
   }
 }
