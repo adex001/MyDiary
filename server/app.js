@@ -1,13 +1,29 @@
 import express from 'express';
+import bodyParser from 'body-parser';
+import dotenv from 'dotenv';
 
+
+// Configure dotenv
+dotenv.config();
 
 const app = express();
-const port = 3000;
+
+// App to Use these 
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+
+const port = process.env.PORT || 3000;
 
 app.get('/', (req, res) => {
- res.send('Hello World!');
+  res.status(200).json({
+    message: 'You reached my homepage successfully.'
+  });
 });
 
-app.listen(port, (req, res) => {
- console.log('Server running on port '+port);
-});
+app.listen(port, () => {
+  console.log(`App started on port ${port}`);
+})
+
+export default app; // For testing purposes
