@@ -1,0 +1,22 @@
+{
+  "name": "mydiary",
+  "version": "1.0.0",
+  "description": "diary, ",
+  "main": "server/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adex001/MyDiary.git"
+  },
+  "author": "Olatunbosun Adeoye",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adex001/MyDiary/issues"
+  },
+  "homepage": "https://github.com/adex001/MyDiary#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
