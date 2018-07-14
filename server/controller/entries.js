@@ -22,8 +22,7 @@ class EntriesController {
 
     // Write an helper function
     // Loops through the data array and search for the entriesId
-    // Parseint(radix 10 converts to decimal)
-    const Searcher = Objectid => Objectid.entriesId === parseInt(entriesId, 10);
+    const Searcher = Objectid => Objectid.entriesId === (entriesId);
 
     // Find the entry
     const found = datas.find(Searcher);
@@ -38,6 +37,36 @@ class EntriesController {
         message: 'entry not found',
       });
     }
+  }
+
+  /**
+ * A controller to add an new entry to the database
+ *    Create an object then push to the database.
+ */
+  static createEntry(req, res) {
+    // Get parameters from the req.body
+    const {
+      entryId, entriesTitle, entry, visibility,
+    } = req.body;
+
+    // Validation happens here
+    // if error happens here, return an error response
+
+    // Create an entry object
+    const entryObject = {
+      entryId,
+      entriesTitle,
+      entry,
+      visibility,
+      timestamp: new Date(),
+    };
+
+    // Push the object to the database
+    datas.push(entryObject);
+    res.status(201).json({
+      message: 'entry created successfully',
+      entry: datas[datas.length - 1],
+    });
   }
 }
 

@@ -13,11 +13,7 @@ entriesRoute.get('/', EntriesController.fetchEntries);
 
 entriesRoute.get('/:entriesId', EntriesController.fetchSingleEntry);
 
-entriesRoute.post('/', (req, res) => {
-  res.status(200).json({
-    message: 'This is the entries post route',
-  });
-});
+entriesRoute.post('/', EntriesController.createEntry);
 
 entriesRoute.put('/', (req, res) => {
   res.status(200).json({

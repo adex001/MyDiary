@@ -40,7 +40,7 @@ describe('Testing the GET /entries route', () => {
 });
 
 describe('Testing the GET /entries/:entriesID route', () => {
-  let id = 2;
+  let id = 'sgdfw-frgrh-htkyk';
   it('It should return a status of 200', (done) => {
     chai.request(app)
       .get(`/api/v1/entries/${id}`)
@@ -70,7 +70,7 @@ describe('Testing the GET /entries/:entriesID route', () => {
       });
   });
   it('It should return message `Entry not found and a status 404`', (done) => {
-    id = 255;
+    id = 'should-give-me-error';
     chai.request(app)
       .get(`/api/v1/entries/${id}`)
       .set('Accept', 'application/json')
@@ -82,15 +82,19 @@ describe('Testing the GET /entries/:entriesID route', () => {
   });
 });
 
-describe('Testing the POST /entries route', () => {
-  const postitem = {id: 25};
-  it('It should return a status of 200', (done) => {
+describe('Create an entry with POST /entries route', () => {
+  const postitem = {
+    entriesTitle: 'Jesus is Lord',
+    entry: 'This is not time to mess around, we must lend a helping hand, to these dying and confused world, lets rise up and show the light',
+    visibility: 'public',
+  };
+  it('It should return a status of 201', (done) => {
     chai.request(app)
       .post('/api/v1/entries')
       .set('Accept', 'application/json')
       .send(postitem)
       .end((err, response) => {
-        response.should.have.status(200);
+        response.should.have.status(201);
         done();
       });
   });
@@ -105,13 +109,13 @@ describe('Testing the POST /entries route', () => {
         done();
       });
   });
-  it('It should return message `Return an entry with a particular ID`', (done) => {
+  it('It should return message `entry created successfully`', (done) => {
     chai.request(app)
       .post('/api/v1/entries')
       .set('Accept', 'application/json')
       .send(postitem)
       .end((err, response) => {
-        response.body.message.should.eql('This is the entries post route');
+        response.body.message.should.eql('entry created successfully');
         done();
       });
   });
