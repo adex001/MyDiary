@@ -1,15 +1,15 @@
 // Importing Router class from express
 import { Router } from 'express';
 
+// Imoport entries Controller
+import EntriesController from '../controller/entries';
+
 const entriesRoute = Router();
 
 // Routes.
 // Having a prefix of api/v1/entries
-entriesRoute.get('/', (req, res) => {
-  res.status(200).json({
-    message: 'These are the entries',
-  });
-});
+// fetch all entries
+entriesRoute.get('/', EntriesController.fetchEntries);
 
 entriesRoute.get('/:entriesId', (req, res) => {
   res.status(200).json({

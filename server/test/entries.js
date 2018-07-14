@@ -28,6 +28,15 @@ describe('Testing the GET /entries route', () => {
         done();
       });
   });
+  it('It should return message "All entries by users"', (done) => {
+    chai.request(app)
+      .get('/api/v1/entries')
+      .set('Accept', 'application/json')
+      .end((err, response) => {
+        response.body.message.should.eql('All entries by users');
+        done();
+      });
+  });
 });
 
 describe('Testing the GET /entries/:entriesID route', () => {
