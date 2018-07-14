@@ -11,11 +11,7 @@ const entriesRoute = Router();
 // fetch all entries
 entriesRoute.get('/', EntriesController.fetchEntries);
 
-entriesRoute.get('/:entriesId', (req, res) => {
-  res.status(200).json({
-    message: 'Return an entry with a particular ID',
-  });
-});
+entriesRoute.get('/:entriesId', EntriesController.fetchSingleEntry);
 
 entriesRoute.post('/', (req, res) => {
   res.status(200).json({

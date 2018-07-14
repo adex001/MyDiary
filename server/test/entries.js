@@ -40,7 +40,7 @@ describe('Testing the GET /entries route', () => {
 });
 
 describe('Testing the GET /entries/:entriesID route', () => {
-  const id = 25;
+  let id = 2;
   it('It should return a status of 200', (done) => {
     chai.request(app)
       .get(`/api/v1/entries/${id}`)
@@ -60,12 +60,23 @@ describe('Testing the GET /entries/:entriesID route', () => {
         done();
       });
   });
-  it('It should return message `Return an entry with a particular ID`', (done) => {
+  it('It should return message `found entry`', (done) => {
     chai.request(app)
       .get(`/api/v1/entries/${id}`)
       .set('Accept', 'application/json')
       .end((err, response) => {
-        response.body.message.should.eql('Return an entry with a particular ID');
+        response.body.message.should.eql('found entry');
+        done();
+      });
+  });
+  it('It should return message `Entry not found and a status 404`', (done) => {
+    id = 255;
+    chai.request(app)
+      .get(`/api/v1/entries/${id}`)
+      .set('Accept', 'application/json')
+      .end((err, response) => {
+        response.body.message.should.eql('entry not found');
+        response.should.have.status(404);
         done();
       });
   });
