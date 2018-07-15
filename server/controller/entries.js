@@ -27,7 +27,7 @@ class EntriesController {
     // Find the entry
     const found = datas.find(Searcher);
 
-    if (found) {
+    if (found !== undefined) {
       res.status(200).json({
         message: 'found entry',
         entry: found,
@@ -67,6 +67,39 @@ class EntriesController {
       message: 'entry created successfully',
       entry: datas[datas.length - 1],
     });
+  }
+
+  /**
+   * A controller to update an entry
+   */
+  static modifyEntry(req, res) {
+    // Collects the entriesId
+    const { entriesId } = req.params;
+    // Get parameters from the req.body
+    const {
+      entriesTitle, entry, visibility,
+    } = req.body;
+    // Loops through the data array and search for the entriesId
+    const Searcher = Objectid => Objectid.entriesId === entriesId;
+
+    // Find the entry
+    const found = datas.find(Searcher);
+    // If entry was found, then update the model
+    if (found) {
+      // Update the entry
+      found.entriesTitle = entriesTitle;
+      found.entry = entry;
+      found.visibility = visibility;
+
+      res.status(200).json({
+        message: 'entry has been modified',
+        entry: found,
+      });
+    } else {
+      res.status(404).json({
+        message: 'entry not found',
+      });
+    }
   }
 }
 

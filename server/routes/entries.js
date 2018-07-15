@@ -15,9 +15,7 @@ entriesRoute.get('/:entriesId', EntriesController.fetchSingleEntry);
 
 entriesRoute.post('/', EntriesController.createEntry);
 
-entriesRoute.put('/', (req, res) => {
-  res.status(200).json({
-    message: 'This is the entries PUT route',
-  });
-});
+entriesRoute.put('/:entriesId', EntriesController.modifyEntry);
+
+
 export default entriesRoute;
