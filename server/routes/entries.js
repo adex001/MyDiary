@@ -17,5 +17,7 @@ entriesRoute.post('/', EntriesController.createEntry);
 
 entriesRoute.put('/:entriesId', EntriesController.modifyEntry);
 
+entriesRoute.delete('/:entriesId', EntriesController.deleteEntry);
+
 
 export default entriesRoute;

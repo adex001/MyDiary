@@ -84,7 +84,7 @@ class EntriesController {
 
     // Find the entry
     const found = datas.find(Searcher);
-    // If entry was found, then update the model
+    // If entry was found, then update the entry
     if (found) {
       // Update the entry
       found.entriesTitle = entriesTitle;
@@ -98,6 +98,33 @@ class EntriesController {
     } else {
       res.status(404).json({
         message: 'entry not found',
+      });
+    }
+  }
+
+  /**
+   * A controller to delete an entry
+   */
+  static deleteEntry(req, res) {
+    // Collects the entriesId
+    const { entriesId } = req.params;
+
+    // Loops through the data array and search for the entriesId
+    const Searcher = Objectid => Objectid.entriesId === entriesId;
+
+    // Find the entry
+    const found = datas.find(Searcher);
+
+    // If entry was found, then delete the entry
+    if (found) {
+      datas.pop();
+
+      res.status(200).json({
+        message: 'entry deleted successfully',
+      });
+    } else {
+      res.status(404).json({
+        message: 'entry not found.',
       });
     }
   }
