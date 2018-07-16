@@ -124,7 +124,6 @@ describe('Create an entry with POST /entries route', () => {
 });
 
 describe('Testing the PUT /entries route', () => {
-  let entryId = 'aaaaa-aaaaa-aaaaa';
   const updateObject = {
     entriesTitle: 'Gods sent',
     entry: 'Remarkable',
