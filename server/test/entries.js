@@ -1,5 +1,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
+import { it, describe } from 'mocha';
+
 
 // import app
 import app from '../app';
@@ -194,7 +196,6 @@ describe('Testing the PUT /entries route', () => {
 });
 
 describe('Testing the DELETE /entries/:entriesId route', () => {
-  let entryId = 'aaaaa-aaaaa-aaaaa';
   it('It should return a status of 200', (done) => {
     chai.request(app)
       .delete('/api/v1/entries/aaaaa-aaaaa-aaaaa')
