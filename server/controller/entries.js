@@ -46,7 +46,7 @@ class EntriesController {
   static createEntry(req, res) {
     // Get parameters from the req.body
     const {
-      entryId, entriesTitle, entry, visibility,
+      entryId, entriesTitle, entry, visibility, userId,
     } = req.body;
 
     // Validation happens here
@@ -59,6 +59,7 @@ class EntriesController {
       entry,
       visibility,
       timestamp: new Date(),
+      userId,
     };
 
     // Push the object to the database
