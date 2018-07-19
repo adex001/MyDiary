@@ -201,7 +201,7 @@ describe('Testing the DELETE /entries/:entriesId route', () => {
       .delete('/api/v1/entries/aaaaa-aaaaa-aaaaa')
       .set('Accept', 'application/json')
       .end((err, response) => {
-        response.should.have.status(204);
+        response.should.have.status(200);
         response.should.be.an('object');
         response.body.message.should.eql('entry deleted successfully');
         done();

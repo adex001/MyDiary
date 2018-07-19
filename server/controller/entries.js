@@ -121,7 +121,7 @@ class EntriesController {
       // find the position of the element and delete
       datas.splice(datas.indexOf(found), 1);
 
-      res.status(204).json({
+      res.status(200).json({
         message: 'entry deleted successfully',
       });
     } else {
