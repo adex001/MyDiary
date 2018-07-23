@@ -50,7 +50,7 @@ class EntriesController {
     } = req.body;
 
     // Validation happens here
-    if (typeof entriesId !== 'number' || entriesTitle.trim() === '' || entry.trim() === '') {
+    if (typeof parseInt(entriesId, 10) !== 'number' || entriesTitle.trim() === '' || entry.trim() === '') {
       res.status(400).json({
         message: 'Inomplete parameters entered or bad request',
       });
