@@ -1595,13 +1595,15 @@ padding: 15px;
   
   }
 }
-@media (min-width: 1024px) and (min-height: 700px){
+@media (min-width: 1024px){
   .holover{
     display: none;
   }
   .entries{
     width: 22%;
   }
+}
+@media (min-width: 1024px) and (min-height: 700px){
   footer{
     position: absolute;
     bottom: 0;
