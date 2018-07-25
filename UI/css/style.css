@@ -701,6 +701,11 @@ padding: 15px;
     font-family: 'oxygen', 'sans-serif';
     background-position: 50% 50%;
   }
+  footer{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+  }
   .container{
     width: 90%;
     margin: 0 auto;
@@ -934,6 +939,11 @@ padding: 15px;
     margin: 0;
     padding: 0;
   }
+  footer{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+  }
 .desc button{
   width: 50%;
   margin-left: 25%;
@@ -1157,7 +1167,12 @@ padding: 15px;
     width: 90%;
     margin: 0 auto;
   }
-  
+  footer{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+  }
+
   header{
     border: 1px solid #f4ad42;
     background: rgba(0, 0, 0, 0.5);
@@ -1456,7 +1471,6 @@ padding: 15px;
   
   .bottomborder{
     border-bottom: 1px ridge #f4ad42;
-    /* margin-top: 20px; */
   }
   .reminder{
     margin-top: 25px;
@@ -1609,5 +1623,10 @@ padding: 15px;
   }
   .entries{
     width: 22%;
+  }
+  footer{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
   }
 }
