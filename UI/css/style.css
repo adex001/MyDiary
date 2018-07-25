@@ -318,7 +318,6 @@ margin-top: 10px;
 
 .bottomborder{
   border-bottom: 1px ridge #f4ad42;
-  /* margin-top: 20px; */
 }
 .reminder{
   margin-top: 25px;
@@ -507,7 +506,6 @@ padding: 15px;
 .myform label{
   width: 98%;
   text-align: left;
-  /* margin-top: 20px; */
   margin: 0;
 }
 .forminput{
@@ -685,10 +683,6 @@ padding: 15px;
     background-color: grey;;
   }
 
-
-
-
-
 } /*  end of media query */
 
 /* SMARTPHONES LANDSCAPE */
@@ -731,7 +725,6 @@ padding: 15px;
 .myform label{
   width: 98%;
   text-align: left;
-  /* margin-top: 20px; */
   margin: 0;
 }
 .forminput{
@@ -934,6 +927,7 @@ padding: 15px;
     margin: 0;
     padding: 0;
   }
+
 .desc button{
   width: 50%;
   margin-left: 25%;
@@ -1152,12 +1146,11 @@ padding: 15px;
   
   }
   
-  
   .container{
     width: 90%;
     margin: 0 auto;
   }
-  
+
   header{
     border: 1px solid #f4ad42;
     background: rgba(0, 0, 0, 0.5);
@@ -1456,7 +1449,6 @@ padding: 15px;
   
   .bottomborder{
     border-bottom: 1px ridge #f4ad42;
-    /* margin-top: 20px; */
   }
   .reminder{
     margin-top: 25px;
@@ -1609,5 +1601,20 @@ padding: 15px;
   }
   .entries{
     width: 22%;
+  }
+}
+@media (min-width: 1024px) and (min-height: 700px){
+  footer{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+  }
+}
+
+@media (min-height: 1000px) and (max-width: 601px) {
+  footer{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
   }
 }
