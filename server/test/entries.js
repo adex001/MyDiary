@@ -42,7 +42,7 @@ describe('Testing the GET /entries route', () => {
 });
 
 describe('Testing the GET /entries/:entriesID route', () => {
-  let id = 'sgdfw-frgrh-htkyk';
+  let id = 1;
   it('It should return a status of 200', (done) => {
     chai.request(app)
       .get(`/api/v1/entries/${id}`)
@@ -72,7 +72,7 @@ describe('Testing the GET /entries/:entriesID route', () => {
       });
   });
   it('It should return message `Entry not found and a status 404`', (done) => {
-    id = 'should-give-me-error';
+    id = 5646523;
     chai.request(app)
       .get(`/api/v1/entries/${id}`)
       .set('Accept', 'application/json')
@@ -86,9 +86,11 @@ describe('Testing the GET /entries/:entriesID route', () => {
 
 describe('Create an entry with POST /entries route', () => {
   const postitem = {
-    entriesTitle: 'Jesus is Lord',
-    entry: 'This is not time to mess around, we must lend a helping hand, to these dying and confused world, lets rise up and show the light',
-    visibility: 'public',
+    entriesId: 4,
+    entriesTitle: 'A good man',
+    entry: 'lorem ipsor',
+    visibility: 'private',
+    userId: 1,
   };
   it('It should return a status of 201', (done) => {
     chai.request(app)
@@ -97,20 +99,11 @@ describe('Create an entry with POST /entries route', () => {
       .send(postitem)
       .end((err, response) => {
         response.should.have.status(201);
-        done();
-      });
-  });
-
-  it('It should return an object as response', (done) => {
-    chai.request(app)
-      .post('/api/v1/entries')
-      .set('Accept', 'application/json')
-      .send(postitem)
-      .end((err, response) => {
         response.should.be.an('object');
         done();
       });
   });
+
   it('It should return message `entry created successfully`', (done) => {
     chai.request(app)
       .post('/api/v1/entries')
@@ -118,6 +111,23 @@ describe('Create an entry with POST /entries route', () => {
       .send(postitem)
       .end((err, response) => {
         response.body.message.should.eql('entry created successfully');
+        done();
+      });
+  });
+  it('It should return message `incomplete parameters` when incorrect details entered', (done) => {
+    const errorEntry = {
+      entriesId: 4,
+      entriesTitle: '',
+      entry: 'lorem ipsor',
+      visibility: 'private',
+      userId: 1,
+    };
+    chai.request(app)
+      .post('/api/v1/entries')
+      .set('Accept', 'application/json')
+      .send(errorEntry)
+      .end((err, response) => {
+        response.body.message.should.eql('Inomplete parameters entered or bad request');
         done();
       });
   });
@@ -131,7 +141,7 @@ describe('Testing the PUT /entries route', () => {
   };
   it('It should return a status of 200', (done) => {
     chai.request(app)
-      .put('/api/v1/entries/aaaaa-aaaaa-aaaaa')
+      .put('/api/v1/entries/1')
       .set('Accept', 'application/json')
       .send(updateObject)
       .end((err, response) => {
@@ -142,7 +152,7 @@ describe('Testing the PUT /entries route', () => {
 
   it('It should return an object as response', (done) => {
     chai.request(app)
-      .put('/api/v1/entries/aaaaa-aaaaa-aaaaa')
+      .put('/api/v1/entries/1')
       .set('Accept', 'application/json')
       .send(updateObject)
       .end((err, response) => {
@@ -152,7 +162,7 @@ describe('Testing the PUT /entries route', () => {
   });
   it('It should return message `entry has been modified`', (done) => {
     chai.request(app)
-      .put('/api/v1/entries/aaaaa-aaaaa-aaaaa')
+      .put('/api/v1/entries/1')
       .set('Accept', 'application/json')
       .send(updateObject)
       .end((err, response) => {
@@ -163,7 +173,7 @@ describe('Testing the PUT /entries route', () => {
 
   it('It should return a status of 404', (done) => {
     chai.request(app)
-      .put('/api/v1/entries/fbwbf-dnlsf-jeffe')
+      .put('/api/v1/entries/786554')
       .set('Accept', 'application/json')
       .send(updateObject)
       .end((err, response) => {
@@ -174,7 +184,7 @@ describe('Testing the PUT /entries route', () => {
 
   it('It should return an object as response', (done) => {
     chai.request(app)
-      .put('/api/v1/entries/fbwbf-dnlsf-jeffe')
+      .put('/api/v1/entries/754543')
       .set('Accept', 'application/json')
       .send(updateObject)
       .end((err, response) => {
@@ -184,7 +194,7 @@ describe('Testing the PUT /entries route', () => {
   });
   it('It should return message `entry not found`', (done) => {
     chai.request(app)
-      .put('/api/v1/entries/fbwbf-dnlsf-jeffe')
+      .put('/api/v1/entries/68u453')
       .set('Accept', 'application/json')
       .send(updateObject)
       .end((err, response) => {
@@ -197,7 +207,7 @@ describe('Testing the PUT /entries route', () => {
 describe('Testing the DELETE /entries/:entriesId route', () => {
   it('It should delete an entry successfully', (done) => {
     chai.request(app)
-      .delete('/api/v1/entries/aaaaa-aaaaa-aaaaa')
+      .delete('/api/v1/entries/1')
       .set('Accept', 'application/json')
       .end((err, response) => {
         response.should.have.status(200);
@@ -207,28 +217,9 @@ describe('Testing the DELETE /entries/:entriesId route', () => {
       });
   });
 
-  // it('It should return an object as response', (done) => {
-  //   chai.request(app)
-  //     .delete('/api/v1/entries/aaaaa-aaaaa-aaaaa')
-  //     .set('Accept', 'application/json')
-  //     .end((err, response) => {
-  //       response.should.be.an('object');
-  //       done();
-  //     });
-  // });
-  // it('It should return message `entry deleted successfully`', (done) => {
-  //   chai.request(app)
-  //     .delete('/api/v1/entries/aaaaa-aaaaa-aaaaa')
-  //     .set('Accept', 'application/json')
-  //     .end((err, response) => {
-  //       response.body.message.should.eql('entry deleted successfully');
-  //       done();
-  //     });
-  // });
-
   it('It should return a status of 404 when unknown id entered', (done) => {
     chai.request(app)
-      .delete('/api/v1/entries/fbwbf-dnlsf-jeffe')
+      .delete('/api/v1/entries/4337769')
       .set('Accept', 'application/json')
       .end((err, response) => {
         response.should.have.status(404);
@@ -238,7 +229,7 @@ describe('Testing the DELETE /entries/:entriesId route', () => {
 
   it('It should return an object as response', (done) => {
     chai.request(app)
-      .delete('/api/v1/entries/fbwbf-dnlsf-jeffe')
+      .delete('/api/v1/entries/23446867')
       .set('Accept', 'application/json')
       .end((err, response) => {
         response.should.be.an('object');
@@ -247,7 +238,7 @@ describe('Testing the DELETE /entries/:entriesId route', () => {
   });
   it('It should return message `entry not found.`', (done) => {
     chai.request(app)
-      .delete('/api/v1/entries/fbwbf-dnlsf-jeffe')
+      .delete('/api/v1/entries/634677')
       .set('Accept', 'application/json')
       .end((err, response) => {
         response.body.message.should.eql('entry not found.');

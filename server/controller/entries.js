@@ -22,7 +22,7 @@ class EntriesController {
 
     // Write an helper function
     // Loops through the data array and search for the entriesId
-    const Searcher = Objectid => Objectid.entriesId === (entriesId);
+    const Searcher = Objectid => Objectid.entriesId === parseInt(entriesId, 10);
 
     // Find the entry
     const found = datas.find(Searcher);
@@ -46,15 +46,20 @@ class EntriesController {
   static createEntry(req, res) {
     // Get parameters from the req.body
     const {
-      entryId, entriesTitle, entry, visibility, userId,
+      entriesId, entriesTitle, entry, visibility, userId,
     } = req.body;
 
     // Validation happens here
+    if (typeof parseInt(entriesId, 10) !== 'number' || entriesTitle.trim() === '' || entry.trim() === '') {
+      res.status(400).json({
+        message: 'Inomplete parameters entered or bad request',
+      });
+    }
     // if error happens here, return an error response
 
     // Create an entry object
     const entryObject = {
-      entryId,
+      entriesId,
       entriesTitle,
       entry,
       visibility,
@@ -81,7 +86,7 @@ class EntriesController {
       entriesTitle, entry, visibility,
     } = req.body;
     // Loops through the data array and search for the entriesId
-    const Searcher = Objectid => Objectid.entriesId === entriesId;
+    const Searcher = Objectid => Objectid.entriesId === parseInt(entriesId, 10);
 
     // Find the entry
     const found = datas.find(Searcher);
@@ -111,7 +116,7 @@ class EntriesController {
     const { entriesId } = req.params;
 
     // Loops through the data array and search for the entriesId
-    const Searcher = Objectid => Objectid.entriesId === entriesId;
+    const Searcher = Objectid => Objectid.entriesId === parseInt(entriesId, 10);
 
     // Find the entry
     const found = datas.find(Searcher);
