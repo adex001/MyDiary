@@ -2,6 +2,8 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import { it, describe } from 'mocha';
 
+// Import middleware
+import TokenHandler from '../middleware/tokenhandler';
 
 // import app
 import app from '../app';
@@ -9,12 +11,18 @@ import app from '../app';
 // configure app
 app.use(chaiHttp);
 chai.should();
+const usertest = {
+  username: 'testing',
+  password: 'tester',
+};
 
+const token = TokenHandler.createToken(usertest);
 describe('Testing the GET /entries route', () => {
   it('It should return a status of 200', (done) => {
     chai.request(app)
       .get('/api/v1/entries')
       .set('Accept', 'application/json')
+      .set('authorization', `JWT ${token}`)
       .end((err, response) => {
         response.should.have.status(200);
         done();
@@ -25,6 +33,7 @@ describe('Testing the GET /entries route', () => {
     chai.request(app)
       .get('/api/v1/entries')
       .set('Accept', 'application/json')
+      .set('authorization', `JWT ${token}`)
       .end((err, response) => {
         response.should.be.an('object');
         done();
@@ -34,8 +43,32 @@ describe('Testing the GET /entries route', () => {
     chai.request(app)
       .get('/api/v1/entries')
       .set('Accept', 'application/json')
+      .set('authorization', `JWT ${token}`)
       .end((err, response) => {
         response.body.message.should.eql('All entries by users');
+        done();
+      });
+  });
+  it('Validation should fail because of invalid token', (done) => {
+    chai.request(app)
+      .get('/api/v1/entries')
+      .set('Accept', 'application/json')
+      .set('authorization', `JWT ${token}invalid`)
+      .end((err, response) => {
+        response.should.have.status(403);
+        response.should.be.an('object');
+        response.body.message.should.eql('Token cannot be verified');
+        done();
+      });
+  });
+  it('Should fail if no token is provided!', (done) => {
+    chai.request(app)
+      .get('/api/v1/entries')
+      .set('Accept', 'application/json')
+      .end((err, response) => {
+        response.should.have.status(403);
+        response.should.be.an('object');
+        response.body.message.should.eql('No token provided!');
         done();
       });
   });
@@ -47,6 +80,7 @@ describe('Testing the GET /entries/:entriesID route', () => {
     chai.request(app)
       .get(`/api/v1/entries/${id}`)
       .set('Accept', 'application/json')
+      .set('authorization', `JWT ${token}`)
       .end((err, response) => {
         response.should.have.status(200);
         done();
@@ -57,6 +91,7 @@ describe('Testing the GET /entries/:entriesID route', () => {
     chai.request(app)
       .get(`/api/v1/entries/${id}`)
       .set('Accept', 'application/json')
+      .set('authorization', `JWT ${token}`)
       .end((err, response) => {
         response.should.be.an('object');
         done();
@@ -66,6 +101,7 @@ describe('Testing the GET /entries/:entriesID route', () => {
     chai.request(app)
       .get(`/api/v1/entries/${id}`)
       .set('Accept', 'application/json')
+      .set('authorization', `JWT ${token}`)
       .end((err, response) => {
         response.body.message.should.eql('found entry');
         done();
@@ -76,6 +112,7 @@ describe('Testing the GET /entries/:entriesID route', () => {
     chai.request(app)
       .get(`/api/v1/entries/${id}`)
       .set('Accept', 'application/json')
+      .set('authorization', `JWT ${token}`)
       .end((err, response) => {
         response.body.message.should.eql('entry not found');
         response.should.have.status(404);
@@ -96,6 +133,7 @@ describe('Create an entry with POST /entries route', () => {
     chai.request(app)
       .post('/api/v1/entries')
       .set('Accept', 'application/json')
+      .set('authorization', `JWT ${token}`)
       .send(postitem)
       .end((err, response) => {
         response.should.have.status(201);
@@ -108,6 +146,7 @@ describe('Create an entry with POST /entries route', () => {
     chai.request(app)
       .post('/api/v1/entries')
       .set('Accept', 'application/json')
+      .set('authorization', `JWT ${token}`)
       .send(postitem)
       .end((err, response) => {
         response.body.message.should.eql('entry created successfully');
@@ -125,6 +164,7 @@ describe('Create an entry with POST /entries route', () => {
     chai.request(app)
       .post('/api/v1/entries')
       .set('Accept', 'application/json')
+      .set('authorization', `JWT ${token}`)
       .send(errorEntry)
       .end((err, response) => {
         response.body.message.should.eql('Inomplete parameters entered or bad request');
@@ -143,6 +183,7 @@ describe('Testing the PUT /entries route', () => {
     chai.request(app)
       .put('/api/v1/entries/1')
       .set('Accept', 'application/json')
+      .set('authorization', `JWT ${token}`)
       .send(updateObject)
       .end((err, response) => {
         response.should.have.status(200);
@@ -154,6 +195,7 @@ describe('Testing the PUT /entries route', () => {
     chai.request(app)
       .put('/api/v1/entries/1')
       .set('Accept', 'application/json')
+      .set('authorization', `JWT ${token}`)
       .send(updateObject)
       .end((err, response) => {
         response.should.be.an('object');
@@ -164,6 +206,7 @@ describe('Testing the PUT /entries route', () => {
     chai.request(app)
       .put('/api/v1/entries/1')
       .set('Accept', 'application/json')
+      .set('authorization', `JWT ${token}`)
       .send(updateObject)
       .end((err, response) => {
         response.body.message.should.eql('entry has been modified');
@@ -175,6 +218,7 @@ describe('Testing the PUT /entries route', () => {
     chai.request(app)
       .put('/api/v1/entries/786554')
       .set('Accept', 'application/json')
+      .set('authorization', `JWT ${token}`)
       .send(updateObject)
       .end((err, response) => {
         response.should.have.status(404);
@@ -186,6 +230,7 @@ describe('Testing the PUT /entries route', () => {
     chai.request(app)
       .put('/api/v1/entries/754543')
       .set('Accept', 'application/json')
+      .set('authorization', `JWT ${token}`)
       .send(updateObject)
       .end((err, response) => {
         response.should.be.an('object');
@@ -196,6 +241,7 @@ describe('Testing the PUT /entries route', () => {
     chai.request(app)
       .put('/api/v1/entries/68u453')
       .set('Accept', 'application/json')
+      .set('authorization', `JWT ${token}`)
       .send(updateObject)
       .end((err, response) => {
         response.body.message.should.eql('entry not found');
@@ -209,6 +255,7 @@ describe('Testing the DELETE /entries/:entriesId route', () => {
     chai.request(app)
       .delete('/api/v1/entries/1')
       .set('Accept', 'application/json')
+      .set('authorization', `JWT ${token}`)
       .end((err, response) => {
         response.should.have.status(200);
         response.should.be.an('object');
@@ -221,6 +268,7 @@ describe('Testing the DELETE /entries/:entriesId route', () => {
     chai.request(app)
       .delete('/api/v1/entries/4337769')
       .set('Accept', 'application/json')
+      .set('authorization', `JWT ${token}`)
       .end((err, response) => {
         response.should.have.status(404);
         done();
@@ -231,6 +279,7 @@ describe('Testing the DELETE /entries/:entriesId route', () => {
     chai.request(app)
       .delete('/api/v1/entries/23446867')
       .set('Accept', 'application/json')
+      .set('authorization', `JWT ${token}`)
       .end((err, response) => {
         response.should.be.an('object');
         done();
@@ -240,6 +289,7 @@ describe('Testing the DELETE /entries/:entriesId route', () => {
     chai.request(app)
       .delete('/api/v1/entries/634677')
       .set('Accept', 'application/json')
+      .set('authorization', `JWT ${token}`)
       .end((err, response) => {
         response.body.message.should.eql('entry not found.');
         done();
