@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 
 import entriesRoute from './routes/entries';
+import authRoute from './routes/auth';
 
 
 // Configure dotenv
@@ -18,7 +19,7 @@ app.use(bodyParser.json());
 
 // Register routes
 app.use('/api/v1/entries', entriesRoute);
-
+app.use('/api/v1/auth', authRoute);
 
 const port = process.env.PORT || 4000;
 
