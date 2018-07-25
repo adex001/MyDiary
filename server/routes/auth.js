@@ -7,5 +7,6 @@ import AuthController from '../controller/auth';
 const authRoute = Router();
 
 authRoute.post('/login', AuthController.login);
+authRoute.post('/signup', AuthController.signup);
 
 export default authRoute;
