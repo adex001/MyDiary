@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import TokenHandler from '../middleware/tokenhandler';
 import pool from '../database/connectDatabase';
+import bcrypt from 'bcrypt';
 
 // Configure dotenv
 dotenv.config();
@@ -53,6 +54,10 @@ class AuthController {
 
     // Validates the object
     // Encrypt the password with bcrypt.
+    // Generate Salt round
+    const saltRound = Math.floor(Math.random() * 5);
+    const salt = bcrypt.genSaltSync(saltRound);
+    const password = bcrypt.hashSync(plainPassword, salt);
 
 
     // Insert object into database
@@ -67,10 +72,15 @@ class AuthController {
       // eslint-disable-nextline
       console.log('Data successfully created!');
       console.log(result);
-      // const token = TokenHandler.createToken(result.rows[0]);
+      const payload = {
+        email,
+        username,
+        firstname,
+      };
+      const token = TokenHandler.createToken(payload);
       return res.status(201).json({
         message: 'User signed up and token created',
-        // token,
+        token,
         result,
       });
     });
