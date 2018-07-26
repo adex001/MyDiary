@@ -34,7 +34,7 @@ const createTableUsers = `CREATE TABLE IF NOT EXISTS users (
   timeRegistered TIMESTAMP
 
 )`;
-
+// eslint-disable-next-line
 pool.query(createTableUsers, (err, response) => {
   console.log('User Table Created!!');
   if (err) {

@@ -1,7 +1,8 @@
 import dotenv from 'dotenv';
+import bcrypt from 'bcrypt';
 import TokenHandler from '../middleware/tokenhandler';
 import pool from '../database/connectDatabase';
-import bcrypt from 'bcrypt';
+
 
 // Configure dotenv
 dotenv.config();
@@ -61,7 +62,7 @@ class AuthController {
 
 
     // Insert object into database
-    pool.query(`INSERT INTO users (username, email, password, firstname, lastname) VALUES ( ${username}, '${email}', '${password}', '${firstname}', '${lastname}');`, (err, result) => {
+    pool.query(`INSERT INTO users (username, email, password, firstname, lastname) VALUES ( '${username}', '${email}', '${password}', '${firstname}', '${lastname}');`, (err, result) => {
       if (err) {
         console.log(err);
         return res.status(500).json({
