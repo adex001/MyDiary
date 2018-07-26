@@ -27,16 +27,15 @@ class EntriesController {
     // Find the entry
     const found = datas.find(Searcher);
 
-    if (found !== undefined) {
-      res.status(200).json({
-        message: 'found entry',
-        entry: found,
-      });
-    } else {
-      res.status(404).json({
+    if (found === undefined) {
+      return res.status(404).json({
         message: 'entry not found',
       });
     }
+    return res.status(200).json({
+      message: 'found entry',
+      entry: found,
+    });
   }
 
   /**

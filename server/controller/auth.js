@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import jwt from 'jsonwebtoken';
+import TokenHandler from '../middleware/tokenhandler';
 
 // Configure dotenv
 dotenv.config();
@@ -8,10 +8,15 @@ class AuthController {
   static login(req, res) {
     // Get the details of user from req body
     // USERS
-    const users = [{
-      email: 'adeoye',
-      password: 'password',
-    }];
+    const users = [
+      {
+        email: 'adeoye',
+        password: 'password',
+      },
+      {
+        email: 'testing',
+        password: 'tester',
+      }];
     const { email, password } = req.body;
     // Find an email by searching through the database
     const checkEmail = userObject => userObject.email === email;
@@ -23,12 +28,11 @@ class AuthController {
         console.log('Validation Successful');
 
         // Attempting to create a token
-        const secretKey = process.env.SECRET_KEY;
-        const token = jwt.sign(user, secretKey);
+        const loginToken = TokenHandler.createToken(user);
 
         return res.status(200).json({
           message: 'Token created',
-          token,
+          loginToken,
         });
       }
       return res.status(400).json({
@@ -48,30 +52,35 @@ class AuthController {
 
     // Validates the object
     // If successfully updated
-    const mockUsers = [{
-      mockUsername: 'adex001',
-      mockPassword: 'password',
-      email: 'adeoye',
-      firstname,
-      lastname,
-      username,
-      password,
-    }];
+    const mockUsers = [
+      {
+        email: 'adeoye',
+        firstname,
+        lastname,
+        username,
+        password: 'password',
+      },
+      {
+        email: 'testing',
+        firstname,
+        lastname,
+        username,
+        password: 'password',
+      }];
 
     const checkEmail = userObject => userObject.email === email;
     const user = mockUsers.find(checkEmail);
 
     if (user) {
       // Validate the password
-      if (user.email === email && user.mockPassword === password) {
+      if (user.email === email && user.password === password) {
         console.log('Validation Successful');
 
         // Attempting to create a token
-        const secretKey = process.env.SECRET_KEY;
-        const token = jwt.sign(user, secretKey);
+        const token = TokenHandler.createToken(user);
 
-        return res.status(200).json({
-          message: 'Token created',
+        return res.status(201).json({
+          message: 'User signed up and token created',
           token,
         });
       }
