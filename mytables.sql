@@ -1,5 +1,5 @@
 CREATE TABLE users (
-  userId serial PRIMARY KEY,
+  userId INTEGER PRIMARY KEY,
   username varchar(30) NOT NULL,
   email varchar(80) NOT NULL,
   password varchar(400) NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE entries (
   entriesId serial PRIMARY KEY,
   entryTitle varchar(30) NOT NULL,
   entry varchar(1000) NOT NULL,
-  userId int NOT NULL,
+  userId REFERENCES users(userId),
   visibility varchar(10) NOT NULL,
   timeCreated TIMESTAMP NOT NULL,
   timeModified TIMESTAMP
@@ -22,7 +22,7 @@ CREATE TABLE entries (
 )
 CREATE TABLE reminders (
   reminderId serial PRIMARY KEY,
-  userId int NOT NULL,
+  userId REFERENCES users(userId),
   reminderTime TIMESTAMP ,
 
 
