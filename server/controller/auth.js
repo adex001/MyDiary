@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import TokenHandler from '../middleware/tokenhandler';
+import pool from '../database/connectDatabase';
 
 // Configure dotenv
 dotenv.config();
@@ -47,49 +48,31 @@ class AuthController {
   static signup(req, res) {
   // Get all parameters from the req.body
     const {
-      firstname, lastname, username, email, password,
+      firstname, lastname, username, email, plainPassword,
     } = req.body;
 
     // Validates the object
-    // If successfully updated
-    const mockUsers = [
-      {
-        email: 'adeoye',
-        firstname,
-        lastname,
-        username,
-        password: 'password',
-      },
-      {
-        email: 'testing',
-        firstname,
-        lastname,
-        username,
-        password: 'password',
-      }];
+    // Encrypt the password with bcrypt.
 
-    const checkEmail = userObject => userObject.email === email;
-    const user = mockUsers.find(checkEmail);
 
-    if (user) {
-      // Validate the password
-      if (user.email === email && user.password === password) {
-        console.log('Validation Successful');
-
-        // Attempting to create a token
-        const token = TokenHandler.createToken(user);
-
-        return res.status(201).json({
-          message: 'User signed up and token created',
-          token,
+    // Insert object into database
+    pool.query(`INSERT INTO users (username, email, password, firstname, lastname) VALUES ( ${username}, '${email}', '${password}', '${firstname}', '${lastname}');`, (err, result) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({
+          message: 'Server error has occured!',
         });
       }
-      return res.status(400).json({
-        message: 'Validation failed',
+      // Attempting to create a token
+      // eslint-disable-nextline
+      console.log('Data successfully created!');
+      console.log(result);
+      // const token = TokenHandler.createToken(result.rows[0]);
+      return res.status(201).json({
+        message: 'User signed up and token created',
+        // token,
+        result,
       });
-    }
-    return res.status(404).json({
-      message: 'User was not found',
     });
   }
 }
