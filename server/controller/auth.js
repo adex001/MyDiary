@@ -16,13 +16,13 @@ class AuthController {
     pool.query(`SELECT * from users WHERE email = '${email}'`, (err, result) => {
       // If email doesnt exist, return users not found or login failed
       if (err) {
-        return res.status(404).json({
+        return res.status(500).json({
           message: 'Login failed! No connection to database.',
         });
       }
 
       if (result.rowCount < 1) {
-        return res.status(401).json({
+        return res.status(404).json({
           message: 'Login failed! No such email',
         });
       }
@@ -50,6 +50,11 @@ class AuthController {
     } = req.body;
 
     // Validates the object
+    if (typeof email === 'undefined' || email.length === 0) {
+      return res.status(401).json({
+        message: 'Email cannot be blank!',
+      });
+    }
     // Encrypt the password with bcrypt.
     // Generate Salt round
     const saltRound = Math.floor(Math.random() * 5);
@@ -59,7 +64,7 @@ class AuthController {
 
     // Insert object into database
     pool.query(`INSERT INTO users (username, email, password, firstname, lastname) VALUES ( '${username}', '${email}', '${password}', '${firstname}', '${lastname}');`, (err, result) => {
-      pool.end(); // returns the pool back.
+      // pool.end(); // returns the pool back.
       if (err) {
         console.log(err);
         return res.status(500).json({
@@ -82,6 +87,7 @@ class AuthController {
         result,
       });
     });
+    return null;
   }
 }
 

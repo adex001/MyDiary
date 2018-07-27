@@ -54,13 +54,18 @@ class EntriesController {
  * A controller to add an new entry to the database
  *    Create an object then push to the database.
  */
+  // eslint-disable-next-line
   static createEntry(req, res) {
     // Get parameters from the req.body
     const {
       entryTitle, entry, visibility, userId,
     } = req.body;
     // Gets userId from the token
-
+    if (entryTitle.length === 0 || typeof entryTitle === 'undefined') {
+      return res.status(401).json({
+        message: 'Pls, enter an entry title',
+      });
+    }
     // Validation happens here
     // Create an entry object
     // Push the object to the database
@@ -99,6 +104,11 @@ class EntriesController {
         return res.status(500).json({
           message: 'internal server error',
           err,
+        });
+      }
+      if (result.rowCount < 0) {
+        return res.status(404).json({
+          message: 'entry not found',
         });
       }
       return res.status(200).json({
