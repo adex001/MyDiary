@@ -34,13 +34,24 @@ const createTableUsers = `CREATE TABLE IF NOT EXISTS users (
   timeRegistered TIMESTAMP
 
 )`;
+
+const createTableEntries = `CREATE TABLE IF NOT EXISTS entries (
+  entriesId serial PRIMARY KEY,
+  entryTitle varchar(50) NOT NULL,
+  entry varchar(1000) NOT NULL,
+  userId int,
+  visibility varchar(10) NOT NULL,
+  timeCreated varchar(30),
+  timeModified varchar(30)
+)`;
 // eslint-disable-next-line
-pool.query(createTableUsers, (err, response) => {
-  console.log('User Table Created!!');
+pool.query(`${createTableUsers}; ${createTableEntries};`, (err, response) => {
+
   if (err) {
     // eslint-disable-next-line
-    console.error('Table cannot be created');
+    return console.error('Users and Entries Table cannot be created');
   }
+  console.log('Users and Entries Table Created!!');
 });
 
 export default pool;

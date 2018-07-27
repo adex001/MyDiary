@@ -1,14 +1,27 @@
-import datas from '../dummymodel/requestdatas';
+import pool from '../database/connectDatabase';
 
 class EntriesController {
   /**
    * A controller to fetch all entries from the database.
    */
   static fetchEntries(req, res) {
-    // retrieve all entries from the database.
-    res.status(200).json({
-      message: 'All entries by users',
-      entries: datas,
+    // retrieve all entries from the database FOR NOW!!!.
+    const fetchEntryQuery = 'SELECT * FROM entries;';
+    pool.query(fetchEntryQuery, (err, result) => {
+      if (err) {
+        return res.status(500).json({
+          message: 'Unable to connect!',
+        });
+      }
+      if (result.rowCount < 1) {
+        return res.status(404).json({
+          message: 'No entry',
+        });
+      }
+      return res.status(200).json({
+        message: 'All entries by users',
+        entries: result.rows,
+      });
     });
   }
 
@@ -17,24 +30,23 @@ class EntriesController {
    */
   static fetchSingleEntry(req, res) {
     const { entriesId } = req.params;
-
-    // Searches through the datas fo find a particular requestId
-
-    // Write an helper function
-    // Loops through the data array and search for the entriesId
-    const Searcher = Objectid => Objectid.entriesId === parseInt(entriesId, 10);
-
-    // Find the entry
-    const found = datas.find(Searcher);
-
-    if (found === undefined) {
-      return res.status(404).json({
-        message: 'entry not found',
+    // Searches the particular entry from the database
+    const findEntryQuery = `SELECT * FROM entries WHERE entriesId = '${entriesId}';`;
+    pool.query(findEntryQuery, (err, result) => {
+      if (err) {
+        return res.status(500).json({
+          message: 'internal server error!',
+        });
+      }
+      if (result.rowCount < 1) {
+        return res.status(404).json({
+          message: 'No such entry',
+        });
+      }
+      return res.status(200).json({
+        message: 'Entry found',
+        entry: result.rows[0],
       });
-    }
-    return res.status(200).json({
-      message: 'found entry',
-      entry: found,
     });
   }
 
@@ -45,32 +57,25 @@ class EntriesController {
   static createEntry(req, res) {
     // Get parameters from the req.body
     const {
-      entriesId, entriesTitle, entry, visibility, userId,
+      entryTitle, entry, visibility, userId,
     } = req.body;
+    // Gets userId from the token
 
     // Validation happens here
-    if (typeof parseInt(entriesId, 10) !== 'number' || entriesTitle.trim() === '' || entry.trim() === '') {
-      res.status(400).json({
-        message: 'Inomplete parameters entered or bad request',
-      });
-    }
-    // if error happens here, return an error response
-
     // Create an entry object
-    const entryObject = {
-      entriesId,
-      entriesTitle,
-      entry,
-      visibility,
-      timestamp: new Date(),
-      userId,
-    };
-
     // Push the object to the database
-    datas.push(entryObject);
-    res.status(201).json({
-      message: 'entry created successfully',
-      entry: datas[datas.length - 1],
+    const createEntryQuery = `INSERT INTO entries (entry, entryTitle, visibility, userId) VALUES ('${entry}', '${entryTitle}', '${visibility}', '${userId}');`;
+    pool.query(createEntryQuery, (err, result) => {
+      if (err) {
+        return res.status(500).json({
+          message: 'Internal Server Error',
+          err,
+        });
+      }
+      return res.status(201).json({
+        message: 'Entries created successfully',
+        entry: result.rows[0],
+      });
     });
   }
 
@@ -82,29 +87,25 @@ class EntriesController {
     const { entriesId } = req.params;
     // Get parameters from the req.body
     const {
-      entriesTitle, entry, visibility,
+      entryTitle, entry, visibility,
     } = req.body;
-    // Loops through the data array and search for the entriesId
-    const Searcher = Objectid => Objectid.entriesId === parseInt(entriesId, 10);
 
-    // Find the entry
-    const found = datas.find(Searcher);
-    // If entry was found, then update the entry
-    if (found) {
-      // Update the entry
-      found.entriesTitle = entriesTitle;
-      found.entry = entry;
-      found.visibility = visibility;
+    // Validate entries
 
-      res.status(200).json({
-        message: 'entry has been modified',
-        entry: found,
+    // Update SQL query
+    const updateEntryQuery = `UPDATE entries SET entryTitle = '${entryTitle}', entry = '${entry}', visibility = '${visibility}' WHERE entriesId = '${parseInt(entriesId, 10)}';`;
+    pool.query(updateEntryQuery, (err, result) => {
+      if (err) {
+        return res.status(500).json({
+          message: 'internal server error',
+          err,
+        });
+      }
+      return res.status(200).json({
+        message: 'successfully updated',
+        entry: result.rows,
       });
-    } else {
-      res.status(404).json({
-        message: 'entry not found',
-      });
-    }
+    });
   }
 
   /**
@@ -114,25 +115,25 @@ class EntriesController {
     // Collects the entriesId
     const { entriesId } = req.params;
 
-    // Loops through the data array and search for the entriesId
-    const Searcher = Objectid => Objectid.entriesId === parseInt(entriesId, 10);
+    // Delete entry from entries where entryId is something
+    const deleteEntryQuery = `DELETE FROM entries WHERE entriesId = ${entriesId};`;
 
-    // Find the entry
-    const found = datas.find(Searcher);
+    pool.query(deleteEntryQuery, (err, result) => {
+      if (err) {
+        return res.status(500).json({
+          message: 'internal server error',
+        });
+      }
+      // Does not show content but response is deleted.
+      if (result.rowCount < 1) {
+        return res.status(404).json({
+          message: 'User not found!!',
+        });
+      }
+      return res.status(204);
+    });
 
-    // If entry was found, then delete the entry
-    if (found) {
-      // find the position of the element and delete
-      datas.splice(datas.indexOf(found), 1);
-
-      res.status(200).json({
-        message: 'entry deleted successfully',
-      });
-    } else {
-      res.status(404).json({
-        message: 'entry not found.',
-      });
-    }
+    //
   }
 }
 
