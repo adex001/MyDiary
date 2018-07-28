@@ -1,9 +1,12 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import { it, describe } from 'mocha';
+import {
+  it, describe, before, after,
+} from 'mocha';
 
 // Import middleware
 import TokenHandler from '../middleware/tokenhandler';
+import QueryHelper from '../utilities/queryhelper';
 
 // import app
 import app from '../app';
@@ -17,39 +20,128 @@ const usertest = {
 };
 
 const token = TokenHandler.createToken(usertest);
-describe('Testing the GET /entries route', () => {
-  it('It should return a status of 200', (done) => {
+describe('Testing Routes to make sure they are successful', () => {
+  before(() => {
+    // Empty all datas in the database
+    QueryHelper.emptyDatabase('entries');
+  });
+  it('It should return a status of 404 and return no entry', (done) => {
     chai.request(app)
       .get('/api/v1/entries')
       .set('Accept', 'application/json')
       .set('authorization', `JWT ${token}`)
       .end((err, response) => {
-        response.should.have.status(200);
+        response.should.have.status(404);
+        response.should.be.an('object');
+        response.body.message.should.eql('No entry');
+        // Should have property entries
         done();
       });
   });
 
-  it('It should return an object as response', (done) => {
+  it('should return entry not found when entryid doesn\'t exist', (done) => {
     chai.request(app)
-      .get('/api/v1/entries')
+      .get('/api/v1/entries/10')
       .set('Accept', 'application/json')
       .set('authorization', `JWT ${token}`)
       .end((err, response) => {
+        response.should.have.status(404);
         response.should.be.an('object');
+        response.body.message.should.eql('No such entry');
+
         done();
       });
   });
-  it('It should return message "All entries by users"', (done) => {
+  it('Should add an entry', (done) => {
+    const goodEntry = {
+      entryTitle: 'A good man',
+      entry: 'lorem ipsor',
+      visibility: 'private',
+      userId: 1,
+    };
     chai.request(app)
-      .get('/api/v1/entries')
+      .post('/api/v1/entries')
+      .set('Accept', 'application/json')
+      .set('authorization', `JWT ${token}`)
+      .send(goodEntry)
+      .end((err, response) => {
+        response.should.have.status(201);
+        response.body.message.should.eql('Entries created successfully');
+        done();
+      });
+  });
+  it('Should add another entry', (done) => {
+    const goodEntry1 = {
+      entryTitle: 'Another good man',
+      entry: 'lorem ipsor extra',
+      visibility: 'public',
+      userId: 1,
+    };
+    chai.request(app)
+      .post('/api/v1/entries')
+      .set('Accept', 'application/json')
+      .set('authorization', `JWT ${token}`)
+      .send(goodEntry1)
+      .end((err, response) => {
+        response.should.have.status(201);
+        response.body.message.should.eql('Entries created successfully');
+        done();
+      });
+  });
+  it('Should modify entry', (done) => {
+    const modifyEntry = {
+      entryTitle: 'Edited Another good man',
+      entry: ' Modified lorem ipsor extra',
+      visibility: 'public',
+      userId: 1,
+    };
+    chai.request(app)
+      .put('/api/v1/entries/2')
+      .set('Accept', 'application/json')
+      .set('authorization', `JWT ${token}`)
+      .send(modifyEntry)
+      .end((err, response) => {
+        response.should.have.status(200);
+        response.body.message.should.eql('successfully updated');
+        done();
+      });
+  });
+  it('Should delete entry with entryid of 1', (done) => {
+    chai.request(app)
+      .delete('/api/v1/entries/1')
       .set('Accept', 'application/json')
       .set('authorization', `JWT ${token}`)
       .end((err, response) => {
-        response.body.message.should.eql('All entries by users');
+        response.should.not.have.status(200);
         done();
       });
   });
-  it('Validation should fail because of invalid token', (done) => {
+  after(() => {
+    // Empty all datas in the database
+    QueryHelper.emptyDatabase('entries');
+  });
+  /*
+  it('Should Not add an entry because of invalid parameters', (done) => {
+    const noEntry = {
+      entryTitle: 'A good man',
+      entrrrrrr: 'dfgw',
+      visibility: 'private',
+      userId: 1,
+    };
+    chai.request(app)
+      .post('/api/v1/entries')
+      .set('Accept', 'application/json')
+      .set('authorization', `JWT ${token}`)
+      .send(noEntry)
+      .end((err, response) => {
+        response.should.have.status(400);
+        response.body.message.should.eql('Cannot create entry');
+        done();
+      });
+  });
+  */
+  /*
+  it('Validation should fail because of invalid parameters', (done) => {
     chai.request(app)
       .get('/api/v1/entries')
       .set('Accept', 'application/json')
@@ -72,227 +164,30 @@ describe('Testing the GET /entries route', () => {
         done();
       });
   });
+  */
 });
-// Create an entry
-describe('Create an entry with POST /entries route', () => {
-  const postitem = {
-    entryTitle: 'A good man',
-    entry: 'lorem ipsor',
-    visibility: 'private',
-    userId: 1,
-  };
-  it('It should return a status of 201', (done) => {
+describe('Token handlers', () => {
+  it('gives "No token provided!" when token is not present in the header', (done) => {
     chai.request(app)
-      .post('/api/v1/entries')
+      .get('/api/v1/entries')
       .set('Accept', 'application/json')
-      .set('authorization', `JWT ${token}`)
-      .send(postitem)
       .end((err, response) => {
-        response.should.have.status(201);
+        response.should.have.status(403);
         response.should.be.an('object');
+        response.body.message.should.eql('No token provided!');
         done();
       });
   });
-
-  it('It should return message `entry created successfully`', (done) => {
+  it('gives Token cannot be verified when wrong token is set', (done) => {
+    const wrongToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRDVkOWQ3NDYwMyIsImlhdCI6MTUzMjc3NDMwMiwiZXhwIjoxNTMyNzc3OTAyfQ.2_MjI9xatS3YuMvRK2pL77548qBHFxZumVgQtZwHou4';
     chai.request(app)
-      .post('/api/v1/entries')
+      .get('/api/v1/entries')
       .set('Accept', 'application/json')
-      .set('authorization', `JWT ${token}`)
-      .send(postitem)
+      .set('authorization', `JWT ${wrongToken}`)
       .end((err, response) => {
-        response.body.message.should.eql('Entries created successfully');
-        done();
-      });
-  });
-  it('It should return message `Pls, enter an entry title` no title is entered', (done) => {
-    const errorEntry = {
-      entryId: 4,
-      entryTitle: '',
-      entry: 'lorem ipsor',
-      visibility: 'private',
-      userId: 1,
-    };
-    chai.request(app)
-      .post('/api/v1/entries')
-      .set('Accept', 'application/json')
-      .set('authorization', `JWT ${token}`)
-      .send(errorEntry)
-      .end((err, response) => {
-        response.body.message.should.eql('Pls, enter an entry title');
-        done();
-      });
-  });
-});
-// Get entry by id
-describe('Testing the GET /entries/:entriesID route', () => {
-  let id = 8;
-  it('It should return a status of 404', (done) => {
-    chai.request(app)
-      .get(`/api/v1/entries/${id}`)
-      .set('Accept', 'application/json')
-      .set('authorization', `JWT ${token}`)
-      .end((err, response) => {
-        response.should.have.status(404);
-        response.body.message.should.be.eql('No such entry');
-        done();
-      });
-  });
-
-  it('It should return an object as response', (done) => {
-    chai.request(app)
-      .get(`/api/v1/entries/${id}`)
-      .set('Accept', 'application/json')
-      .set('authorization', `JWT ${token}`)
-      .end((err, response) => {
+        response.should.have.status(403);
         response.should.be.an('object');
-        done();
-      });
-  });
-  it('It should return message `found entry`', (done) => {
-    const newId = 18;
-    chai.request(app)
-      .get(`/api/v1/entries/${newId}`)
-      .set('Accept', 'application/json')
-      .set('authorization', `JWT ${token}`)
-      .end((err, response) => {
-        response.body.message.should.eql('Entry found');
-        done();
-      });
-  });
-  it('It should return message `Entry not found and a status 404`', (done) => {
-    id = 5646523;
-    chai.request(app)
-      .get(`/api/v1/entries/${id}`)
-      .set('Accept', 'application/json')
-      .set('authorization', `JWT ${token}`)
-      .end((err, response) => {
-        response.should.have.status(404);
-        response.body.message.should.be.eql('No such entry');
-        done();
-      });
-  });
-});
-
-describe('Testing the PUT /entries route', () => {
-  const updateObject = {
-    entryTitle: 'Gods sent',
-    entry: 'Remarkable',
-    visibility: 'private',
-  };
-  it('It should return a status of 200', (done) => {
-    chai.request(app)
-      .put('/api/v1/entries/1')
-      .set('Accept', 'application/json')
-      .set('authorization', `JWT ${token}`)
-      .send(updateObject)
-      .end((err, response) => {
-        response.should.have.status(200);
-        done();
-      });
-  });
-
-  it('It should return an object as response', (done) => {
-    chai.request(app)
-      .put('/api/v1/entries/1')
-      .set('Accept', 'application/json')
-      .set('authorization', `JWT ${token}`)
-      .send(updateObject)
-      .end((err, response) => {
-        response.should.be.an('object');
-        done();
-      });
-  });
-  it('It should return message `successfully updated`', (done) => {
-    chai.request(app)
-      .put('/api/v1/entries/1')
-      .set('Accept', 'application/json')
-      .set('authorization', `JWT ${token}`)
-      .send(updateObject)
-      .end((err, response) => {
-        response.body.message.should.eql('successfully updated');
-        done();
-      });
-  });
-
-  it('It should return a status of 404', (done) => {
-    chai.request(app)
-      .put('/api/v1/entries/786554')
-      .set('Accept', 'application/json')
-      .set('authorization', `JWT ${token}`)
-      .send(updateObject)
-      .end((err, response) => {
-        response.should.have.status(404);
-        done();
-      });
-  });
-
-  it('It should return an object as response', (done) => {
-    chai.request(app)
-      .put('/api/v1/entries/754543')
-      .set('Accept', 'application/json')
-      .set('authorization', `JWT ${token}`)
-      .send(updateObject)
-      .end((err, response) => {
-        response.should.be.an('object');
-        done();
-      });
-  });
-  it('It should return message `entry not found`', (done) => {
-    chai.request(app)
-      .put('/api/v1/entries/68u453')
-      .set('Accept', 'application/json')
-      .set('authorization', `JWT ${token}`)
-      .send(updateObject)
-      .end((err, response) => {
-        response.body.message.should.eql('entry not found');
-        done();
-      });
-  });
-});
-
-describe('Testing the DELETE /entries/:entriesId route', () => {
-//   it('It should delete an entry successfully', (done) => {
-//     chai.request(app)
-//       .delete('/api/v1/entries/1')
-//       .set('Accept', 'application/json')
-//       .set('authorization', `JWT ${token}`)
-//       .end((err, response) => {
-//         response.should.have.status(200);
-//         response.should.be.an('object');
-//         response.body.message.should.eql('entry deleted successfully');
-//         done();
-//       });
-//   });
-
-  it('It should return a status of 404 when unknown id entered', (done) => {
-    chai.request(app)
-      .delete('/api/v1/entries/4337769')
-      .set('Accept', 'application/json')
-      .set('authorization', `JWT ${token}`)
-      .end((err, response) => {
-        response.should.have.status(404);
-        done();
-      });
-  });
-
-  it('It should return an object as response', (done) => {
-    chai.request(app)
-      .delete('/api/v1/entries/23446867')
-      .set('Accept', 'application/json')
-      .set('authorization', `JWT ${token}`)
-      .end((err, response) => {
-        response.should.be.an('object');
-        done();
-      });
-  });
-  it('It should return message `entry not found.`', (done) => {
-    chai.request(app)
-      .delete('/api/v1/entries/634677')
-      .set('Accept', 'application/json')
-      .set('authorization', `JWT ${token}`)
-      .end((err, response) => {
-        response.body.message.should.eql('User not found!!');
+        response.body.message.should.eql('Token cannot be verified');
         done();
       });
   });

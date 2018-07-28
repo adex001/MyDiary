@@ -55,6 +55,16 @@ class AuthController {
         message: 'Email cannot be blank!',
       });
     }
+    if (typeof plainPassword === 'undefined' || plainPassword.length === 0) {
+      return res.status(401).json({
+        message: 'Password cannot be blank',
+      });
+    }
+    if (typeof firstname === 'undefined' || firstname.length === 0) {
+      return res.status(401).json({
+        message: 'Password cannot be blank',
+      });
+    }
     // Encrypt the password with bcrypt.
     // Generate Salt round
     const saltRound = Math.floor(Math.random() * 5);

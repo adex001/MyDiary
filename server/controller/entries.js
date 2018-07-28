@@ -8,11 +8,6 @@ class EntriesController {
     // retrieve all entries from the database FOR NOW!!!.
     const fetchEntryQuery = 'SELECT * FROM entries;';
     pool.query(fetchEntryQuery, (err, result) => {
-      if (err) {
-        return res.status(500).json({
-          message: 'Unable to connect!',
-        });
-      }
       if (result.rowCount < 1) {
         return res.status(404).json({
           message: 'No entry',
@@ -33,11 +28,6 @@ class EntriesController {
     // Searches the particular entry from the database
     const findEntryQuery = `SELECT * FROM entries WHERE entriesId = '${entriesId}';`;
     pool.query(findEntryQuery, (err, result) => {
-      if (err) {
-        return res.status(500).json({
-          message: 'internal server error!',
-        });
-      }
       if (result.rowCount < 1) {
         return res.status(404).json({
           message: 'No such entry',
@@ -71,10 +61,9 @@ class EntriesController {
     // Push the object to the database
     const createEntryQuery = `INSERT INTO entries (entry, entryTitle, visibility, userId) VALUES ('${entry}', '${entryTitle}', '${visibility}', '${userId}');`;
     pool.query(createEntryQuery, (err, result) => {
-      if (err) {
-        return res.status(500).json({
-          message: 'Internal Server Error',
-          err,
+      if (result.rowCount < 1) {
+        return res.status(400).json({
+          message: 'Cannot create entry',
         });
       }
       return res.status(201).json({
@@ -100,12 +89,6 @@ class EntriesController {
     // Update SQL query
     const updateEntryQuery = `UPDATE entries SET entryTitle = '${entryTitle}', entry = '${entry}', visibility = '${visibility}' WHERE entriesId = '${parseInt(entriesId, 10)}';`;
     pool.query(updateEntryQuery, (err, result) => {
-      if (err) {
-        return res.status(500).json({
-          message: 'internal server error',
-          err,
-        });
-      }
       if (result.rowCount < 0) {
         return res.status(404).json({
           message: 'entry not found',
