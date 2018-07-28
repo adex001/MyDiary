@@ -112,18 +112,15 @@ class EntriesController {
     const deleteEntryQuery = `DELETE FROM entries WHERE entriesId = ${entriesId};`;
 
     pool.query(deleteEntryQuery, (err, result) => {
-      if (err) {
-        return res.status(500).json({
-          message: 'internal server error',
-        });
-      }
       // Does not show content but response is deleted.
       if (result.rowCount < 1) {
         return res.status(404).json({
           message: 'User not found!!',
         });
       }
-      return res.status(204);
+      return res.status(200).json({
+        message: 'User Deleted!!',
+      });
     });
 
     //

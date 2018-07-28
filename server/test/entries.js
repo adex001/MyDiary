@@ -112,7 +112,8 @@ describe('Testing Routes to make sure they are successful', () => {
       .set('Accept', 'application/json')
       .set('authorization', `JWT ${token}`)
       .end((err, response) => {
-        response.should.not.have.status(200);
+        response.should.have.status(200);
+        response.body.message.should.eql('User Deleted!!');
         done();
       });
   });
