@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 import bcrypt from 'bcrypt';
 import TokenHandler from '../middleware/tokenhandler';
 import pool from '../database/connectDatabase';
+import InputValidator from '../utilities/inputvalidators';
 
 
 // Configure dotenv
@@ -11,7 +12,17 @@ class AuthController {
   static login(req, res) {
     // Get the details of user from req body
     const { email, plainPassword } = req.body;
-    // USERS
+    // Validate User
+    if (InputValidator.validateEmail(email) === false) {
+      return res.status(400).json({
+        message: 'Enter a valid email',
+      });
+    }
+    if (InputValidator.validatePassword(plainPassword) === false) {
+      return res.status(400).json({
+        message: 'Valid password required!',
+      });
+    }
     // Find an email by searching through the database
     pool.query(`SELECT * from users WHERE email = '${email}'`, (err, result) => {
       // If email doesnt exist, return users not found or login failed
@@ -41,6 +52,7 @@ class AuthController {
         loginToken,
       });
     });
+    return null;
   }
 
   static signup(req, res) {
@@ -50,19 +62,24 @@ class AuthController {
     } = req.body;
 
     // Validates the object
-    if (typeof email === 'undefined' || email.length === 0) {
-      return res.status(401).json({
-        message: 'Email cannot be blank!',
+    if (InputValidator.validateEmail(email) === false) {
+      return res.status(400).json({
+        message: 'Enter a valid email!',
       });
     }
-    if (typeof plainPassword === 'undefined' || plainPassword.length === 0) {
-      return res.status(401).json({
-        message: 'Password cannot be blank',
+    if (InputValidator.validatePassword(plainPassword) === false) {
+      return res.status(400).json({
+        message: 'Valid password required!',
       });
     }
-    if (typeof firstname === 'undefined' || firstname.length === 0) {
-      return res.status(401).json({
-        message: 'Password cannot be blank',
+    if (InputValidator.validateUsername(username) === false) {
+      return res.status(400).json({
+        message: 'Valid Username required',
+      });
+    }
+    if (InputValidator.validateFirstname(firstname) === false) {
+      return res.status(400).json({
+        message: 'Valid Firstname is required',
       });
     }
     // Encrypt the password with bcrypt.
@@ -97,6 +114,53 @@ class AuthController {
         result,
       });
     });
+    return null;
+  }
+
+  static forgotPassword(req, res) {
+    // Get email from body
+    const { email } = req.body;
+    if (InputValidator.validateEmail === false) {
+      return res.status(400).json({
+        message: 'Enter a valid email!',
+      });
+    }
+    const query = `SELECT * FROM users WHERE email = '${email}'`;
+    pool.query(query, (err, result) => {
+      if (result.rowCount < 1) {
+        return res.status(404).json({
+          message: 'No such email',
+        });
+      }
+      return res.status(200).json({
+        message: 'An link has been sent to your email to recover password',
+      });
+    });
+    return null;
+  }
+
+  static modifyProfile(req, res) {
+    // Get userId from token
+    // Get all parameters from the req.body
+    const {
+      firstname, lastname, sex,
+    } = req.body;
+    // Validated requests
+    if (InputValidator.validateFirstname(firstname) === false) {
+      return res.status(400).json({
+        message: 'Enter a valid firstname',
+      });
+    }
+    if (InputValidator.validateSex(sex) === false) {
+      return res.status(400).json({
+        message: 'Invalid entry for sex',
+      });
+    }
+    if (InputValidator.validateLastname(lastname) === false) {
+      return res.status(400).json({
+        message: 'Invalid entry for lastname',
+      });
+    }
     return null;
   }
 }

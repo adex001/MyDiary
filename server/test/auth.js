@@ -55,8 +55,8 @@ describe('Testing the POST /auth/signup route to CREATE A USER', () => {
       .set('Accept', 'application/json')
       .send(noEmail)
       .end((err, response) => {
-        response.should.have.status(401);
-        response.body.message.should.eql('Email cannot be blank!');
+        response.should.have.status(400);
+        response.body.message.should.eql('Enter a valid email!');
         done();
       });
   });

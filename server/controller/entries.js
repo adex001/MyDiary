@@ -1,4 +1,5 @@
 import pool from '../database/connectDatabase';
+import InputValidator from '../utilities/inputvalidators';
 
 class EntriesController {
   /**
@@ -50,15 +51,23 @@ class EntriesController {
     const {
       entryTitle, entry, visibility, userId,
     } = req.body;
-    // Gets userId from the token
-    if (entryTitle.length === 0 || typeof entryTitle === 'undefined') {
-      return res.status(401).json({
-        message: 'Pls, enter an entry title',
+    // Validation happens here
+    if (InputValidator.validateEntryTitle(entryTitle) === false) {
+      return res.status(400).json({
+        message: 'Entry title required!',
       });
     }
-    // Validation happens here
-    // Create an entry object
-    // Push the object to the database
+    if (InputValidator.validateEntry(entry) === false) {
+      return res.status(400).json({
+        message: 'Pls, enter an entry',
+      });
+    }
+    if (InputValidator.validateEntryVisibility(visibility) === false) {
+      return res.status(400).json({
+        message: 'Entry visibility is required!',
+      });
+    }
+    // Gets userId from the token
     const createEntryQuery = `INSERT INTO entries (entry, entryTitle, visibility, userId) VALUES ('${entry}', '${entryTitle}', '${visibility}', '${userId}');`;
     pool.query(createEntryQuery, (err, result) => {
       if (result.rowCount < 1) {
@@ -85,6 +94,21 @@ class EntriesController {
     } = req.body;
 
     // Validate entries
+    if (InputValidator.validateEntryTitle(entryTitle) === false) {
+      return res.status(400).json({
+        message: 'Entry title required!',
+      });
+    }
+    if (InputValidator.validateEntry(entry) === false) {
+      return res.status(400).json({
+        message: 'Pls, enter an entry',
+      });
+    }
+    if (InputValidator.validateEntryVisibility(visibility) === false) {
+      return res.status(400).json({
+        message: 'Entry visibility is required!',
+      });
+    }
 
     // Update SQL query
     const updateEntryQuery = `UPDATE entries SET entryTitle = '${entryTitle}', entry = '${entry}', visibility = '${visibility}' WHERE entriesId = '${parseInt(entriesId, 10)}';`;
@@ -99,6 +123,7 @@ class EntriesController {
         entry: result.rows,
       });
     });
+    return null;
   }
 
   /**
@@ -124,6 +149,18 @@ class EntriesController {
     });
 
     //
+  }
+
+  static countEntries(req, res) {
+    // Get userId from token
+    const countQuery = 'SELECT COUNT(entriesId) FROM entries';
+    pool.query(countQuery, (err, result) => {
+      return res.status(200).json({
+        message: 'Entries count',
+        count: result.rows[0],
+      });
+    });
+    return null;
   }
 }
 

@@ -26,7 +26,7 @@ const pool = (process.env.NODE_ENV === 'test') ? new pg.Pool(testConfig) : new p
 const createTableUsers = `CREATE TABLE IF NOT EXISTS users (
   userId serial PRIMARY KEY,
   username varchar(50) UNIQUE,
-  email varchar(80),
+  email varchar(80) UNIQUE,
   password varchar(400),
   sex varchar(10),
   firstname varchar(50),
@@ -37,9 +37,9 @@ const createTableUsers = `CREATE TABLE IF NOT EXISTS users (
 
 const createTableEntries = `CREATE TABLE IF NOT EXISTS entries (
   entriesId serial PRIMARY KEY,
-  entryTitle varchar(50) UNIQUE NOT NULL,
+  entryTitle varchar(50) NOT NULL,
   entry varchar(1000) NOT NULL,
-  userId int,
+  userId serial REFERENCES users(userId),
   visibility varchar(10) NOT NULL,
   timeCreated varchar(30),
   timeModified varchar(30)

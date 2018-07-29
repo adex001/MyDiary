@@ -22,7 +22,7 @@ CREATE TABLE entries (
 )
 CREATE TABLE reminders (
   reminderId serial PRIMARY KEY,
-  userId REFERENCES users(userId),
+  userId serial REFERENCES users(userId),
   reminderTime TIMESTAMP ,
 
 
