@@ -46,6 +46,9 @@ const createTableEntries = `CREATE TABLE IF NOT EXISTS entries (
 )`;
 // eslint-disable-next-line
 pool.query(`${createTableUsers}; ${createTableEntries};`, (err, response) => {
+  if (err) {
+    console.log('Cannot connect to database');
+  }
   console.log('Users and Entries Table Created!!');
   console.log(`node_env: ${process.env.NODE_ENV}`);
 });
