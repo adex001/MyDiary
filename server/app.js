@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 
 import entriesRoute from './routes/entries';
 import authRoute from './routes/auth';
+import userRoute from './routes/user';
 
 
 // Configure dotenv
@@ -20,6 +21,7 @@ app.use(bodyParser.json());
 // Register routes
 app.use('/api/v1/entries', entriesRoute);
 app.use('/api/v1/auth', authRoute);
+app.use('/api/v1/user', userRoute);
 
 
 const port = process.env.PORT || 4000;
