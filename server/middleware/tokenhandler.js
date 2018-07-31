@@ -3,12 +3,29 @@ import dotenv from 'dotenv';
 
 // Configure dotenv
 dotenv.config();
+
+/**
+ * @class TokenHandler
+ * @export {*} the token handler object
+ */
 class TokenHandler {
+  /**
+ * @function createToken
+ * @param {*} req
+ * @param {*} res
+ * @returns {*} a token
+ */
   static createToken(payload) {
     const token = jwt.sign(payload, process.env.SECRET_KEY);
 
     return token;
   }
+  /**
+ * @function verifyToken
+ * @param {*} req
+ * @param {*} res
+ * @returns {*} verified object and bund it to the req body
+ */
 
   static verifyToken(req, res, next) {
     const token = req.headers.authorization;

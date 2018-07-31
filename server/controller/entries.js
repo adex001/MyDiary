@@ -1,11 +1,15 @@
 import pool from '../database/connectDatabase';
 
+/**
+ * @export EntriesController
+ * @class EntriesController
+ */
 class EntriesController {
   /**
  * @function fetchEntries
  * @param {*} req
  * @param {*} res
- * @returns {*} Email notification
+ * @returns {*} All specific user entries
  */
   static fetchEntries(req, res) {
     // retrieve all entries from the database FOR NOW!!!.
@@ -59,14 +63,13 @@ class EntriesController {
     return null;
   }
   /**
- * @function fetchEntries
+ * @function createEntry
  * @param {*} req
  * @param {*} res
- * @returns {*} Email notification
+ * @returns {*} the created entry
  */
 
   static createEntry(req, res) {
-    // Get parameters from the req.body
     const {
       entryTitle, entry, visibility,
     } = req.body;
@@ -86,10 +89,10 @@ class EntriesController {
   }
 
   /**
- * @function fetchEntries
+ * @function modifyEntry
  * @param {*} req
  * @param {*} res
- * @returns {*} Email notification
+ * @returns {*} the entry modified
  */
   static modifyEntry(req, res) {
     // Collects the entriesId
@@ -114,10 +117,10 @@ class EntriesController {
   }
 
   /**
- * @function fetchEntries
+ * @function deleteEntry
  * @param {*} req
  * @param {*} res
- * @returns {*} Email notification
+ * @returns {*} the deleted entry
  */
   static deleteEntry(req, res) {
     const { entriesId } = req.params;
@@ -139,17 +142,26 @@ class EntriesController {
   }
 
   /**
- * @function fetchEntries
+ * @function countEntries
  * @param {*} req
  * @param {*} res
- * @returns {*} Email notification
+ * @returns {*} the total number of entries for a specific user
  */
   static countEntries(req, res) {
     const countQuery = `SELECT COUNT(entriesId) FROM entries WHERE userId = '${req.decoded.userId}'`;
-    pool.query(countQuery, (err, result) => res.status(200).json({
-      message: 'Entries count',
-      count: result.rows[0],
-    }));
+    pool.query(countQuery, (err, result) => {
+      if (err) {
+        return res.status(500).json({
+          message: 'Internal Server error',
+        });
+      }
+      res.status(200).json({
+        message: 'Entries count',
+        count: result.rows[0].count,
+
+      });
+      return null;
+    });
     return null;
   }
 }

@@ -1,6 +1,17 @@
 import InputValidator from '../utilities/inputvalidators';
-// Validated requests
+/**
+ * @class ValidateRoute
+ * @param {*} req
+ * @param {*} res
+ * @exports {*} ValidateRoute
+ */
 class ValidateRoute {
+/**
+ * @function validateUser
+ * @param {*} req
+ * @param {*} res
+ * @returns {*} next if all tests passsed
+ */
   static validateUser(req, res, next) {
     const {
       firstname, lastname, sex,
@@ -23,13 +34,17 @@ class ValidateRoute {
     next();
     return null;
   }
+  /**
+ * @function validateEntries
+ * @param {*} req
+ * @param {*} res
+ * @returns {*} next if all entries passsed
+ */
 
   static validateEntries(req, res, next) {
     const {
       entryTitle, entry, visibility,
     } = req.body;
-
-    // Validate entries
     if (InputValidator.validateEntryTitle(entryTitle) === false) {
       return res.status(400).json({
         message: 'Entry title required!',
@@ -48,10 +63,15 @@ class ValidateRoute {
     next();
     return null;
   }
+  /**
+ * @function validateAuthLogin
+ * @param {*} req
+ * @param {*} res
+ * @returns {*} next if all login parameters passsed
+ */
 
   static validateAuthLogin(req, res, next) {
     const { email, plainPassword } = req.body;
-    // Validate User
     if (InputValidator.validateEmail(email) === false) {
       return res.status(400).json({
         message: 'Enter a valid email',
@@ -66,6 +86,12 @@ class ValidateRoute {
     return null;
   }
 
+  /**
+ * @function validateAuthSignup
+ * @param {*} req
+ * @param {*} res
+ * @returns {*} next if all endpoints passs
+ */
   static validateAuthSignup(req, res, next) {
     const { firstname, username } = req.body;
 

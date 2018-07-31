@@ -2,17 +2,15 @@ import bcrypt from 'bcrypt';
 import TokenHandler from '../middleware/tokenhandler';
 import pool from '../database/connectDatabase';
 /**
- * @function fetchEntries
- * @param {*} req
- * @param {*} res
- * @returns {*} Email notification
+ * @class AuthCOntroller
+ * @exports {*} Auth Controller
  */
 class AuthController {
   /**
- * @function fetchEntries
+ * @function login
  * @param {*} req
  * @param {*} res
- * @returns {*} Email notification
+ * @returns {*} the token
  */
   static login(req, res) {
     const { email, plainPassword } = req.body;
@@ -44,10 +42,10 @@ class AuthController {
   }
 
   /**
- * @function fetchEntries
+ * @function signup
  * @param {*} req
  * @param {*} res
- * @returns {*} Email notification
+ * @returns {*} the created user
  */
   static signup(req, res) {
     const {

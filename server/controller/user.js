@@ -1,12 +1,17 @@
 import pool from '../database/connectDatabase';
 import InputValidator from '../utilities/inputvalidators';
-
+/**
+ * @class UserController
+ * @param {*} req
+ * @param {*} res
+ * @exports {*} UserController
+ */
 class UserController {
   /**
  * @function forgotPassword
  * @param {*} req
  * @param {*} res
- * @returns {*} Forgot password
+ * @returns {*} the link to reset password
  */
   static forgotPassword(req, res) {
     // Get email from body
@@ -34,7 +39,7 @@ class UserController {
  * @function modifyProfile
  * @param {*} req
  * @param {*} res
- * @returns {*} Modify Profile
+ * @returns {*} the Modified Profile
  */
   static modifyProfile(req, res) {
     const {
