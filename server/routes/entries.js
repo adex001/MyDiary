@@ -4,7 +4,6 @@ import { Router } from 'express';
 // Imoport entries Controller
 import EntriesController from '../controller/entries';
 // Import Middlewares
-
 import TokenHandler from '../middleware/tokenhandler';
 
 const entriesRoute = Router();
@@ -13,6 +12,7 @@ const entriesRoute = Router();
 // Having a prefix of api/v1/entries
 // fetch all entries
 entriesRoute.get('/', TokenHandler.checkToken, TokenHandler.verifyToken, EntriesController.fetchEntries);
+entriesRoute.get('/count', TokenHandler.checkToken, TokenHandler.verifyToken, EntriesController.countEntries);
 entriesRoute.get('/:entriesId', TokenHandler.checkToken, TokenHandler.verifyToken, EntriesController.fetchSingleEntry);
 entriesRoute.post('/', TokenHandler.checkToken, TokenHandler.verifyToken, EntriesController.createEntry);
 entriesRoute.put('/:entriesId', TokenHandler.checkToken, TokenHandler.verifyToken, EntriesController.modifyEntry);

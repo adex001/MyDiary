@@ -9,28 +9,31 @@ import app from '../app';
 app.use(chaiHttp);
 chai.should();
 const usertest = {
-  email: 'testing',
-  password: 'tester',
+  email: 'testing@testing.com',
+  plainPassword: 'password',
 };
-const wrongPassword = {
-  email: 'testing',
-  password: 'wrongPassword',
-};
-const wrongUser = {
-  email: 'wrong tester',
-  password: 'anything',
-};
-
-const mockRegisterUser = {
-  email: 'testing',
+const noEmail = {
   firstname: 'Ayobami',
   lastname: 'Ebenezer',
   username: 'adex001',
-  password: 'password',
+  plainPassword: 'password',
+  email: '',
+};
+const wrongPassword = {
+  email: 'testing@testing.com',
+  plainPassword: 'anything',
+};
+
+const mockRegisterUser = {
+  email: 'testing@testing.com',
+  firstname: 'Ayobami',
+  lastname: 'Ebenezer',
+  username: 'adex001',
+  plainPassword: 'password',
 };
 const mockErrorUser = {
-  email: 'error',
-  password: 'password',
+  email: 'error@error.com',
+  plainPassword: 'password',
 };
 
 describe('Testing the POST /auth/signup route to CREATE A USER', () => {
@@ -46,28 +49,28 @@ describe('Testing the POST /auth/signup route to CREATE A USER', () => {
         done();
       });
   });
-  it('Validation fails with incorrect password!!', (done) => {
+  it('It should not create a user with no email', (done) => {
     chai.request(app)
       .post('/api/v1/auth/signup')
       .set('Accept', 'application/json')
-      .send(wrongPassword)
+      .send(noEmail)
       .end((err, response) => {
         response.should.have.status(400);
-        response.body.message.should.eql('Validation failed');
+        response.body.message.should.eql('Enter a valid email!');
         done();
       });
   });
-  it('Validation fails with wrong user!!', (done) => {
-    chai.request(app)
-      .post('/api/v1/auth/signup')
-      .set('Accept', 'application/json')
-      .send(wrongUser)
-      .end((err, response) => {
-        response.should.have.status(404);
-        response.body.message.should.eql('User was not found');
-        done();
-      });
-  });
+  // it('Validation fails with wrong user!!', (done) => {
+  //   chai.request(app)
+  //     .post('/api/v1/auth/signup')
+  //     .set('Accept', 'application/json')
+  //     .send(wrongUser)
+  //     .end((err, response) => {
+  //       response.should.have.status(500);
+  //       response.body.message.should.eql('Server error has occured!');
+  //       done();
+  //     });
+  // });
 });
 // This should test invalid tokens
 describe('Testing the POST /auth route to LOGIN A USER', () => {
@@ -79,7 +82,7 @@ describe('Testing the POST /auth route to LOGIN A USER', () => {
       .end((err, response) => {
         response.should.have.status(404);
         response.should.be.an('object');
-        response.body.message.should.eql('User was not found');
+        response.body.message.should.eql('Login failed! No such email');
         done();
       });
   });
@@ -100,8 +103,8 @@ describe('Testing the POST /auth route to LOGIN A USER', () => {
       .set('Accept', 'application/json')
       .send(wrongPassword)
       .end((err, response) => {
-        response.should.have.status(400);
-        response.body.message.should.eql('Validation failed');
+        response.should.have.status(401);
+        response.body.message.should.eql('Login failed!');
         done();
       });
   });

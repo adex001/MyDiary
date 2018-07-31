@@ -7,8 +7,10 @@ notifications:
 env:
   global:
     - CC_TEST_REPORTER_ID=6e43395681c5d23c76291514056aadb245aa3c01b3f54ce41b838c5fb6e2ce87
-
+services:
+  - postgresql
 before_script:
+  - psql -c 'create database MyDiaryTest;' -U postgres
   - npm install nyc
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter

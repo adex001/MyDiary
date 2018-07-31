@@ -1,14 +1,23 @@
-import datas from '../dummymodel/requestdatas';
+import pool from '../database/connectDatabase';
+import InputValidator from '../utilities/inputvalidators';
 
 class EntriesController {
   /**
    * A controller to fetch all entries from the database.
    */
   static fetchEntries(req, res) {
-    // retrieve all entries from the database.
-    res.status(200).json({
-      message: 'All entries by users',
-      entries: datas,
+    // retrieve all entries from the database FOR NOW!!!.
+    const fetchEntryQuery = 'SELECT * FROM entries;';
+    pool.query(fetchEntryQuery, (err, result) => {
+      if (result.rowCount < 1) {
+        return res.status(404).json({
+          message: 'No entry',
+        });
+      }
+      return res.status(200).json({
+        message: 'All entries by users',
+        entries: result.rows,
+      });
     });
   }
 
@@ -17,24 +26,18 @@ class EntriesController {
    */
   static fetchSingleEntry(req, res) {
     const { entriesId } = req.params;
-
-    // Searches through the datas fo find a particular requestId
-
-    // Write an helper function
-    // Loops through the data array and search for the entriesId
-    const Searcher = Objectid => Objectid.entriesId === parseInt(entriesId, 10);
-
-    // Find the entry
-    const found = datas.find(Searcher);
-
-    if (found === undefined) {
-      return res.status(404).json({
-        message: 'entry not found',
+    // Searches the particular entry from the database
+    const findEntryQuery = `SELECT * FROM entries WHERE entriesId = '${entriesId}';`;
+    pool.query(findEntryQuery, (err, result) => {
+      if (result.rowCount < 1) {
+        return res.status(404).json({
+          message: 'No such entry',
+        });
+      }
+      return res.status(200).json({
+        message: 'Entry found',
+        entry: result.rows[0],
       });
-    }
-    return res.status(200).json({
-      message: 'found entry',
-      entry: found,
     });
   }
 
@@ -42,35 +45,40 @@ class EntriesController {
  * A controller to add an new entry to the database
  *    Create an object then push to the database.
  */
+  // eslint-disable-next-line
   static createEntry(req, res) {
     // Get parameters from the req.body
     const {
-      entriesId, entriesTitle, entry, visibility, userId,
+      entryTitle, entry, visibility, userId,
     } = req.body;
-
     // Validation happens here
-    if (typeof parseInt(entriesId, 10) !== 'number' || entriesTitle.trim() === '' || entry.trim() === '') {
-      res.status(400).json({
-        message: 'Inomplete parameters entered or bad request',
+    if (InputValidator.validateEntryTitle(entryTitle) === false) {
+      return res.status(400).json({
+        message: 'Entry title required!',
       });
     }
-    // if error happens here, return an error response
-
-    // Create an entry object
-    const entryObject = {
-      entriesId,
-      entriesTitle,
-      entry,
-      visibility,
-      timestamp: new Date(),
-      userId,
-    };
-
-    // Push the object to the database
-    datas.push(entryObject);
-    res.status(201).json({
-      message: 'entry created successfully',
-      entry: datas[datas.length - 1],
+    if (InputValidator.validateEntry(entry) === false) {
+      return res.status(400).json({
+        message: 'Pls, enter an entry',
+      });
+    }
+    if (InputValidator.validateEntryVisibility(visibility) === false) {
+      return res.status(400).json({
+        message: 'Entry visibility is required!',
+      });
+    }
+    // Gets userId from the token
+    const createEntryQuery = `INSERT INTO entries (entry, entryTitle, visibility, userId) VALUES ('${entry}', '${entryTitle}', '${visibility}', '${userId}');`;
+    pool.query(createEntryQuery, (err, result) => {
+      if (result.rowCount < 1) {
+        return res.status(400).json({
+          message: 'Cannot create entry',
+        });
+      }
+      return res.status(201).json({
+        message: 'Entries created successfully',
+        entry: result.rows[0],
+      });
     });
   }
 
@@ -82,29 +90,40 @@ class EntriesController {
     const { entriesId } = req.params;
     // Get parameters from the req.body
     const {
-      entriesTitle, entry, visibility,
+      entryTitle, entry, visibility,
     } = req.body;
-    // Loops through the data array and search for the entriesId
-    const Searcher = Objectid => Objectid.entriesId === parseInt(entriesId, 10);
 
-    // Find the entry
-    const found = datas.find(Searcher);
-    // If entry was found, then update the entry
-    if (found) {
-      // Update the entry
-      found.entriesTitle = entriesTitle;
-      found.entry = entry;
-      found.visibility = visibility;
-
-      res.status(200).json({
-        message: 'entry has been modified',
-        entry: found,
-      });
-    } else {
-      res.status(404).json({
-        message: 'entry not found',
+    // Validate entries
+    if (InputValidator.validateEntryTitle(entryTitle) === false) {
+      return res.status(400).json({
+        message: 'Entry title required!',
       });
     }
+    if (InputValidator.validateEntry(entry) === false) {
+      return res.status(400).json({
+        message: 'Pls, enter an entry',
+      });
+    }
+    if (InputValidator.validateEntryVisibility(visibility) === false) {
+      return res.status(400).json({
+        message: 'Entry visibility is required!',
+      });
+    }
+
+    // Update SQL query
+    const updateEntryQuery = `UPDATE entries SET entryTitle = '${entryTitle}', entry = '${entry}', visibility = '${visibility}' WHERE entriesId = '${parseInt(entriesId, 10)}';`;
+    pool.query(updateEntryQuery, (err, result) => {
+      if (result.rowCount < 0) {
+        return res.status(404).json({
+          message: 'entry not found',
+        });
+      }
+      return res.status(200).json({
+        message: 'successfully updated',
+        entry: result.rows,
+      });
+    });
+    return null;
   }
 
   /**
@@ -114,25 +133,34 @@ class EntriesController {
     // Collects the entriesId
     const { entriesId } = req.params;
 
-    // Loops through the data array and search for the entriesId
-    const Searcher = Objectid => Objectid.entriesId === parseInt(entriesId, 10);
+    // Delete entry from entries where entryId is something
+    const deleteEntryQuery = `DELETE FROM entries WHERE entriesId = ${entriesId};`;
 
-    // Find the entry
-    const found = datas.find(Searcher);
-
-    // If entry was found, then delete the entry
-    if (found) {
-      // find the position of the element and delete
-      datas.splice(datas.indexOf(found), 1);
-
-      res.status(200).json({
-        message: 'entry deleted successfully',
+    pool.query(deleteEntryQuery, (err, result) => {
+      // Does not show content but response is deleted.
+      if (result.rowCount < 1) {
+        return res.status(404).json({
+          message: 'User not found!!',
+        });
+      }
+      return res.status(200).json({
+        message: 'User Deleted!!',
       });
-    } else {
-      res.status(404).json({
-        message: 'entry not found.',
+    });
+
+    //
+  }
+
+  static countEntries(req, res) {
+    // Get userId from token
+    const countQuery = 'SELECT COUNT(entriesId) FROM entries';
+    pool.query(countQuery, (err, result) => {
+      return res.status(200).json({
+        message: 'Entries count',
+        count: result.rows[0],
       });
-    }
+    });
+    return null;
   }
 }
 

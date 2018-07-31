@@ -23,4 +23,31 @@ const testConfig = {
 
 const pool = (process.env.NODE_ENV === 'test') ? new pg.Pool(testConfig) : new pg.Pool(dataConfig);
 
+const createTableUsers = `CREATE TABLE IF NOT EXISTS users (
+  userId serial PRIMARY KEY,
+  username varchar(50) UNIQUE,
+  email varchar(80) UNIQUE,
+  password varchar(400),
+  sex varchar(10),
+  firstname varchar(50),
+  lastname varchar(50), 
+  timeRegistered TIMESTAMP
+
+)`;
+
+const createTableEntries = `CREATE TABLE IF NOT EXISTS entries (
+  entriesId serial PRIMARY KEY,
+  entryTitle varchar(50) NOT NULL,
+  entry varchar(1000) NOT NULL,
+  userId serial REFERENCES users(userId),
+  visibility varchar(10) NOT NULL,
+  timeCreated varchar(30),
+  timeModified varchar(30)
+)`;
+// eslint-disable-next-line
+pool.query(`${createTableUsers}; ${createTableEntries};`, (err, response) => {
+  console.log('Users and Entries Table Created!!');
+  console.log(process.env.NODE_ENV);
+});
+
 export default pool;
