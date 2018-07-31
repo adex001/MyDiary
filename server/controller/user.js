@@ -2,6 +2,12 @@ import pool from '../database/connectDatabase';
 import InputValidator from '../utilities/inputvalidators';
 
 class UserController {
+  /**
+ * @function forgotPassword
+ * @param {*} req
+ * @param {*} res
+ * @returns {*} Forgot password
+ */
   static forgotPassword(req, res) {
     // Get email from body
     const { email } = req.body;
@@ -24,28 +30,28 @@ class UserController {
     return null;
   }
 
+  /**
+ * @function modifyProfile
+ * @param {*} req
+ * @param {*} res
+ * @returns {*} Modify Profile
+ */
   static modifyProfile(req, res) {
-    // Get userId from token
-    // Get all parameters from the req.body
     const {
       firstname, lastname, sex,
     } = req.body;
-    // Validated requests
-    if (InputValidator.validateFirstname(firstname) === false) {
-      return res.status(400).json({
-        message: 'Enter a valid firstname',
+    const modifyProfile = `UPDATE users SET firstname = '${firstname}', lastname = '${lastname}', sex = '${sex}' WHERE userId = '${req.decoded.userId}' RETURNING *;`;
+    pool.query(modifyProfile, (err, result) => {
+      if (err) {
+        return res.status(500).json({
+          message: 'Cannot update entry',
+        });
+      }
+      return res.status(200).json({
+        message: 'User updated successfully',
+        user: result.rows[0],
       });
-    }
-    if (InputValidator.validateSex(sex) === false) {
-      return res.status(400).json({
-        message: 'Invalid entry for sex',
-      });
-    }
-    if (InputValidator.validateLastname(lastname) === false) {
-      return res.status(400).json({
-        message: 'Invalid entry for lastname',
-      });
-    }
+    });
     return null;
   }
 }

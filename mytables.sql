@@ -6,7 +6,7 @@ CREATE TABLE users (
   sex varchar(10),
   firstname varchar(50),
   lastname varchar(50), 
-  timeRegistered TIMESTAMP
+  timeRegistered TIMESTAMP NOT NULL DEFAULT NOW()
 
 )
 
@@ -16,7 +16,7 @@ CREATE TABLE entries (
   entry varchar(1000) NOT NULL,
   userId REFERENCES users(userId),
   visibility varchar(10) NOT NULL,
-  timeCreated TIMESTAMP NOT NULL,
+  timeCreated TIMESTAMP NOT NULL DEFAULT NOW(),
   timeModified TIMESTAMP
 
 )

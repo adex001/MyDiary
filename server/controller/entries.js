@@ -1,10 +1,12 @@
 import pool from '../database/connectDatabase';
-import InputValidator from '../utilities/inputvalidators';
 
 class EntriesController {
   /**
-   * A controller to fetch all entries from the database.
-   */
+ * @function fetchEntries
+ * @param {*} req
+ * @param {*} res
+ * @returns {*} Email notification
+ */
   static fetchEntries(req, res) {
     // retrieve all entries from the database FOR NOW!!!.
     const fetchEntryQuery = `SELECT * FROM entries WHERE userid = '${req.decoded.userId}';`;
@@ -26,15 +28,17 @@ class EntriesController {
       });
     }
     return null;
-  }
+  } /**
+  * @function fetchEntries
+  * @param {*} req
+  * @param {*} res
+  * @returns {*} Email notification
+  */
 
-  /**
-   * A controller to fetch a specific entry
-   */
   static fetchSingleEntry(req, res) {
     const { entriesId } = req.params;
     const findEntryQuery = `SELECT * FROM entries WHERE entriesId = '${entriesId}' AND userid = '${req.decoded.userId}';`;
-    // Searches the particular entry from the database
+
     try {
       pool.query(findEntryQuery, (err, result) => {
         if (result.rowCount < 1) {
@@ -54,34 +58,19 @@ class EntriesController {
     }
     return null;
   }
-
   /**
- * A controller to add an new entry to the database
- *    Create an object then push to the database.
+ * @function fetchEntries
+ * @param {*} req
+ * @param {*} res
+ * @returns {*} Email notification
  */
-  // eslint-disable-next-line
+
   static createEntry(req, res) {
     // Get parameters from the req.body
     const {
       entryTitle, entry, visibility,
     } = req.body;
-    // Validation happens here
-    if (InputValidator.validateEntryTitle(entryTitle) === false) {
-      return res.status(400).json({
-        message: 'Entry title required!',
-      });
-    }
-    if (InputValidator.validateEntry(entry) === false) {
-      return res.status(400).json({
-        message: 'Pls, enter an entry',
-      });
-    }
-    if (InputValidator.validateEntryVisibility(visibility) === false) {
-      return res.status(400).json({
-        message: 'Entry visibility is required!',
-      });
-    }
-    // Gets userId from the token
+
     const createEntryQuery = `INSERT INTO entries (entry, entryTitle, visibility, userId) VALUES ('${entry}', '${entryTitle}', '${visibility}', '${req.decoded.userId}');`;
     pool.query(createEntryQuery, (err, result) => {
       if (result.rowCount < 1) {
@@ -97,33 +86,17 @@ class EntriesController {
   }
 
   /**
-   * A controller to update an entry
-   */
+ * @function fetchEntries
+ * @param {*} req
+ * @param {*} res
+ * @returns {*} Email notification
+ */
   static modifyEntry(req, res) {
     // Collects the entriesId
     const { entriesId } = req.params;
-    // Get parameters from the req.body
     const {
       entryTitle, entry, visibility,
     } = req.body;
-
-    // Validate entries
-    if (InputValidator.validateEntryTitle(entryTitle) === false) {
-      return res.status(400).json({
-        message: 'Entry title required!',
-      });
-    }
-    if (InputValidator.validateEntry(entry) === false) {
-      return res.status(400).json({
-        message: 'Pls, enter an entry',
-      });
-    }
-    if (InputValidator.validateEntryVisibility(visibility) === false) {
-      return res.status(400).json({
-        message: 'Entry visibility is required!',
-      });
-    }
-
     // Update SQL query
     const updateEntryQuery = `UPDATE entries SET entryTitle = '${entryTitle}', entry = '${entry}', visibility = '${visibility}' WHERE entriesId = '${parseInt(entriesId, 10)}' AND userId = '${req.decoded.userId}' RETURNING *;`;
     pool.query(updateEntryQuery, (err, result) => {
@@ -141,17 +114,16 @@ class EntriesController {
   }
 
   /**
-   * A controller to delete an entry
-   */
+ * @function fetchEntries
+ * @param {*} req
+ * @param {*} res
+ * @returns {*} Email notification
+ */
   static deleteEntry(req, res) {
-    // Collects the entriesId
     const { entriesId } = req.params;
-
-    // Delete entry from entries where entryId is something
     const deleteEntryQuery = `DELETE FROM entries WHERE entriesId = '${entriesId}' AND userId = '${req.decoded.userId}' RETURNING *;`;
 
     pool.query(deleteEntryQuery, (err, result) => {
-      // Does not show content but response is deleted.
       if (result.rowCount < 1) {
         return res.status(404).json({
           message: 'User not found!!',
@@ -166,8 +138,13 @@ class EntriesController {
     //
   }
 
+  /**
+ * @function fetchEntries
+ * @param {*} req
+ * @param {*} res
+ * @returns {*} Email notification
+ */
   static countEntries(req, res) {
-    // Get userId from token
     const countQuery = `SELECT COUNT(entriesId) FROM entries WHERE userId = '${req.decoded.userId}'`;
     pool.query(countQuery, (err, result) => res.status(200).json({
       message: 'Entries count',
