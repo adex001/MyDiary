@@ -13,6 +13,9 @@ body{
 
 }
 
+.profile-content {
+  margin-top: 8px;
+}
 
 .container{
   width: 80%;
