@@ -23,7 +23,7 @@ const token = TokenHandler.createToken(usertest);
 describe('Testing Routes to make sure they are successful', () => {
   before(() => {
     // Empty all datas in the database
-    QueryHelper.emptyDatabase('entries');
+    QueryHelper.emptyTable('entries');
   });
   it('It should return a status of 404 and return no entry', (done) => {
     chai.request(app)
@@ -119,53 +119,8 @@ describe('Testing Routes to make sure they are successful', () => {
   });
   after(() => {
     // Empty all datas in the database
-    QueryHelper.emptyDatabase('entries');
+    QueryHelper.emptyTable('entries');
   });
-  /*
-  it('Should Not add an entry because of invalid parameters', (done) => {
-    const noEntry = {
-      entryTitle: 'A good man',
-      entrrrrrr: 'dfgw',
-      visibility: 'private',
-      userId: 1,
-    };
-    chai.request(app)
-      .post('/api/v1/entries')
-      .set('Accept', 'application/json')
-      .set('authorization', `JWT ${token}`)
-      .send(noEntry)
-      .end((err, response) => {
-        response.should.have.status(400);
-        response.body.message.should.eql('Cannot create entry');
-        done();
-      });
-  });
-  */
-  /*
-  it('Validation should fail because of invalid parameters', (done) => {
-    chai.request(app)
-      .get('/api/v1/entries')
-      .set('Accept', 'application/json')
-      .set('authorization', `JWT ${token}invalid`)
-      .end((err, response) => {
-        response.should.have.status(403);
-        response.should.be.an('object');
-        response.body.message.should.eql('Token cannot be verified');
-        done();
-      });
-  });
-  it('Should fail if no token is provided!', (done) => {
-    chai.request(app)
-      .get('/api/v1/entries')
-      .set('Accept', 'application/json')
-      .end((err, response) => {
-        response.should.have.status(403);
-        response.should.be.an('object');
-        response.body.message.should.eql('No token provided!');
-        done();
-      });
-  });
-  */
 });
 describe('Token handlers', () => {
   it('gives "No token provided!" when token is not present in the header', (done) => {

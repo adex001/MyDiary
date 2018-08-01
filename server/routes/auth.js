@@ -1,16 +1,11 @@
-// Importing Router class from express
 import { Router } from 'express';
-
-// Import the Controllers
 import AuthController from '../controller/auth';
-// Import Middlewares
-import TokenHandler from '../middleware/tokenhandler';
+import RouteValidator from '../middleware/routevalidator';
 
 const authRoute = Router();
 
-authRoute.post('/login', AuthController.login);
-authRoute.post('/signup', AuthController.signup);
-authRoute.post('/forgotpassword', AuthController.forgotPassword);
-authRoute.post('/modifyprofile', TokenHandler.checkToken, TokenHandler.verifyToken, AuthController.modifyProfile);
+authRoute.post('/login', RouteValidator.validateAuthLogin, AuthController.login);
+authRoute.post('/signup', RouteValidator.validateAuthLogin, RouteValidator.validateAuthSignup, AuthController.signup);
+
 
 export default authRoute;

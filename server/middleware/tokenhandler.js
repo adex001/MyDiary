@@ -3,42 +3,45 @@ import dotenv from 'dotenv';
 
 // Configure dotenv
 dotenv.config();
+
+/**
+ * @class TokenHandler
+ * @export {*} the token handler object
+ */
 class TokenHandler {
+  /**
+ * @function createToken
+ * @param {*} req
+ * @param {*} res
+ * @returns {*} a token
+ */
   static createToken(payload) {
     const token = jwt.sign(payload, process.env.SECRET_KEY);
 
     return token;
   }
+  /**
+ * @function verifyToken
+ * @param {*} req
+ * @param {*} res
+ * @returns {*} verified object and bund it to the req body
+ */
 
-  static checkToken(req, res, next) {
-    const tokenHeader = req.headers.authorization;
+  static verifyToken(req, res, next) {
+    const token = req.headers.authorization;
     // Check if it exists
-    if (typeof tokenHeader === 'undefined') {
-      return res.status(403).json({
+    if (typeof token === 'undefined') {
+      return res.status(401).json({
         message: 'No token provided!',
       });
     }
-    // TOKEN FORMAT IS OF THE FORM Bearer <access_token>
-    // We extract our token
-    const token = tokenHeader.split(' ')[1];
-    // We bind the token to the req object
-    req.token = token;
-    // go to the next middleware
+    try {
+      const decoded = jwt.verify(token, process.env.SECRET_KEY);
+      req.decoded = decoded;
+    } catch (err) {
+      return res.status(401).json('Token cannot be verified');
+    }
     return next();
-  }
-
-  static verifyToken(req, res, next) {
-    // Verify token
-    jwt.verify(req.token, process.env.SECRET_KEY, (err) => {
-      if (err) {
-        res.status(403).json({
-          message: 'Token cannot be verified',
-        });
-      } else {
-      // send a JSON response
-        next();
-      }
-    });
   }
 }
 

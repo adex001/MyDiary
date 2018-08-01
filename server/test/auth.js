@@ -60,19 +60,8 @@ describe('Testing the POST /auth/signup route to CREATE A USER', () => {
         done();
       });
   });
-  // it('Validation fails with wrong user!!', (done) => {
-  //   chai.request(app)
-  //     .post('/api/v1/auth/signup')
-  //     .set('Accept', 'application/json')
-  //     .send(wrongUser)
-  //     .end((err, response) => {
-  //       response.should.have.status(500);
-  //       response.body.message.should.eql('Server error has occured!');
-  //       done();
-  //     });
-  // });
 });
-// This should test invalid tokens
+
 describe('Testing the POST /auth route to LOGIN A USER', () => {
   it('Validation should fail if user wasn\'t found', (done) => {
     chai.request(app)
@@ -109,5 +98,3 @@ describe('Testing the POST /auth route to LOGIN A USER', () => {
       });
   });
 });
-
-// Should test no token

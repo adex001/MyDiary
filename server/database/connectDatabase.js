@@ -31,7 +31,7 @@ const createTableUsers = `CREATE TABLE IF NOT EXISTS users (
   sex varchar(10),
   firstname varchar(50),
   lastname varchar(50), 
-  timeRegistered TIMESTAMP
+  timeRegistered TIMESTAMP NOT NULL DEFAULT NOW()
 
 )`;
 
@@ -41,13 +41,16 @@ const createTableEntries = `CREATE TABLE IF NOT EXISTS entries (
   entry varchar(1000) NOT NULL,
   userId serial REFERENCES users(userId),
   visibility varchar(10) NOT NULL,
-  timeCreated varchar(30),
-  timeModified varchar(30)
+  timeCreated TIMESTAMP NOT NULL DEFAULT NOW(),
+  timeModified TIMESTAMP
 )`;
 // eslint-disable-next-line
 pool.query(`${createTableUsers}; ${createTableEntries};`, (err, response) => {
+  if (err) {
+    console.log('Cannot connect to database');
+  }
   console.log('Users and Entries Table Created!!');
-  console.log(process.env.NODE_ENV);
+  console.log(`node_env: ${process.env.NODE_ENV}`);
 });
 
 export default pool;
