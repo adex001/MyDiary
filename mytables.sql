@@ -1,29 +1,24 @@
-CREATE TABLE users (
-  userId INTEGER PRIMARY KEY,
-  username varchar(30) NOT NULL,
-  email varchar(80) NOT NULL REQUIRED,
-  password varchar(400) NOT NULL,
+CREATE TABLE IF NOT EXISTS users (
+  userId serial PRIMARY KEY,
+  username varchar(50) UNIQUE,
+  email varchar(80) UNIQUE,
+  password varchar(400),
   sex varchar(10),
   firstname varchar(50),
   lastname varchar(50), 
   timeRegistered TIMESTAMP NOT NULL DEFAULT NOW()
 
-)
-
-CREATE TABLE entries (
+CREATE TABLE IF NOT EXISTS entries (
   entriesId serial PRIMARY KEY,
-  entryTitle varchar(30) NOT NULL,
+  entryTitle varchar(50) NOT NULL,
   entry varchar(1000) NOT NULL,
-  userId REFERENCES users(userId),
+  userId serial REFERENCES users(userId),
   visibility varchar(10) NOT NULL,
   timeCreated TIMESTAMP NOT NULL DEFAULT NOW(),
   timeModified TIMESTAMP
-
 )
-CREATE TABLE reminders (
+CREATE TABLE IF NOT EXISTS reminders (
   reminderId serial PRIMARY KEY,
   userId serial REFERENCES users(userId),
-  reminderTime TIMESTAMP ,
-
-
+  reminderTime TIMESTAMP 
 )

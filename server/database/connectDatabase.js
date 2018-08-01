@@ -44,8 +44,14 @@ const createTableEntries = `CREATE TABLE IF NOT EXISTS entries (
   timeCreated TIMESTAMP NOT NULL DEFAULT NOW(),
   timeModified TIMESTAMP
 )`;
+
+const createTableReminder = `CREATE TABLE IF NOT EXISTS reminders (
+  reminderId serial PRIMARY KEY,
+  userId serial REFERENCES users(userId),
+  reminderTime TIMESTAMP 
+)`;
 // eslint-disable-next-line
-pool.query(`${createTableUsers}; ${createTableEntries};`, (err, response) => {
+pool.query(`${createTableUsers}; ${createTableEntries}; ${createTableReminder};`, (err, response) => {
   if (err) {
     console.log('Cannot connect to database');
   }
