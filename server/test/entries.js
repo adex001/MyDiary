@@ -23,7 +23,7 @@ const token = TokenHandler.createToken(usertest);
 describe('Testing Routes to make sure they are successful', () => {
   before(() => {
     // Empty all datas in the database
-    QueryHelper.emptyDatabase('entries');
+    QueryHelper.emptyTable('entries');
   });
   it('It should return a status of 404 and return no entry', (done) => {
     chai.request(app)
@@ -119,7 +119,7 @@ describe('Testing Routes to make sure they are successful', () => {
   });
   after(() => {
     // Empty all datas in the database
-    QueryHelper.emptyDatabase('entries');
+    QueryHelper.emptyTable('entries');
   });
 });
 describe('Token handlers', () => {
