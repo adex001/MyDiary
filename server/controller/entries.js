@@ -62,6 +62,28 @@ class EntriesController {
     }
     return null;
   }
+
+  /**
+  * @function fetchEntries
+  * @param {*} req
+  * @param {*} res
+  * @returns {*} Email notification
+  */
+  static fetchPublicEntries(req, res) {
+    const visibility = 'public';
+    const publicQuery = `SELECT * FROM entries WHERE visibility = '${visibility}'`;
+    pool.query(publicQuery, (err, result) => {
+      if (err) {
+        return res.status(500).json({
+          message: 'internal server error',
+        });
+      }
+      return res.status(200).json({
+        message: 'All public entries',
+        entries: result.rows,
+      });
+    });
+  }
   /**
  * @function createEntry
  * @param {*} req
@@ -103,6 +125,11 @@ class EntriesController {
     // Update SQL query
     const updateEntryQuery = `UPDATE entries SET entryTitle = '${entryTitle}', entry = '${entry}', visibility = '${visibility}' WHERE entriesId = '${parseInt(entriesId, 10)}' AND userId = '${req.decoded.userId}' RETURNING *;`;
     pool.query(updateEntryQuery, (err, result) => {
+      if (err) {
+        return res.status(500).json({
+          message: 'internal server error',
+        });
+      }
       if (result.rowCount < 0) {
         return res.status(404).json({
           message: 'entry not found',

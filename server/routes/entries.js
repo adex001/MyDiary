@@ -8,6 +8,7 @@ import checkEntryDate from '../middleware/checkentrydate';
 const entriesRoute = Router();
 
 entriesRoute.get('/', TokenHandler.verifyToken, EntriesController.fetchEntries);
+entriesRoute.get('/public', EntriesController.fetchPublicEntries);
 entriesRoute.get('/count', TokenHandler.verifyToken, EntriesController.countEntries);
 entriesRoute.get('/:entriesId', TokenHandler.verifyToken, EntriesController.fetchSingleEntry);
 entriesRoute.post('/', TokenHandler.verifyToken, RouteValidator.validateEntries, EntriesController.createEntry);
