@@ -129,12 +129,12 @@ class EntriesController {
     pool.query(deleteEntryQuery, (err, result) => {
       if (result.rowCount < 1) {
         return res.status(404).json({
-          message: 'User not found!!',
+          message: 'Entry not found!!',
         });
       }
       return res.status(200).json({
-        message: 'User Deleted!!',
-        userDeleted: result.rows[0],
+        message: 'Entry Deleted!!',
+        entryDeleted: result.rows[0],
       });
     });
 
