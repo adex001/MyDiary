@@ -12,9 +12,6 @@ const getPublicEntries = () => {
   })
     .then(response => response.json())
     .then((allEntries) => {
-      console.log(allEntries);
-
-      // Insert the div into the file
       allEntries.entries.forEach((entryObject) => {
         const { entrytitle, entry, entriesid } = entryObject;
         const fetchEntries = document.createElement('div');

@@ -11,7 +11,6 @@ class QueryHelper {
  * @returns {*} empty all contents in the table
  */
   static emptyTable(tableName) {
-    // drop all contents in the database
     const dropQuery = `DELETE FROM ${tableName} RETURNING *`;
     pool.query(dropQuery);
   }

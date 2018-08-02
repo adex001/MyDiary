@@ -24,9 +24,8 @@ const addEntry = ((e) => {
     .then(response => response.json())
     .then((entryResult) => {
       if (entryResult.status === 'true') {
-        return window.location.replace('/UI/entries.html');
+        window.location.replace('/UI/entries.html');
       }
-      return console.log(entryResult.message);
     });
 });
 saveButton.addEventListener('click', addEntry);

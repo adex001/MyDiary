@@ -29,14 +29,10 @@ const signUp = ((e) => {
   })
     .then(response => response.json())
     .then((resultObject) => {
-      console.log(`My result Object ${resultObject}`);
-      console.log(resultObject);
       if (resultObject.status === 'true') {
         localStorage.setItem('token', resultObject.token);
-        return window.location.replace('/UI/dashboard.html');
+        window.location.replace('/UI/dashboard.html');
       }
-      // Display error message 
-      return console.log(resultObject.message);
     });
 });
 

@@ -14,7 +14,6 @@ class UserController {
  * @returns {*} the link to reset password
  */
   static forgotPassword(req, res) {
-    // Get email from body
     const { email } = req.body;
     if (InputValidator.validateEmail === false) {
       return res.status(400).json({

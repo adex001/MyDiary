@@ -7,11 +7,8 @@ import {
 // Import middleware
 import TokenHandler from '../middleware/tokenhandler';
 import QueryHelper from '../utilities/queryhelper';
-
-// import app
 import app from '../app';
 
-// configure app
 app.use(chaiHttp);
 chai.should();
 const usertest = {
@@ -22,7 +19,6 @@ const usertest = {
 const token = TokenHandler.createToken(usertest);
 describe('Testing Routes to make sure they are successful', () => {
   before(() => {
-    // Empty all datas in the database
     QueryHelper.emptyTable('entries');
   });
   it('It should return a status of 404 and return no entry', (done) => {
@@ -34,7 +30,6 @@ describe('Testing Routes to make sure they are successful', () => {
         response.should.have.status(404);
         response.should.be.an('object');
         response.body.message.should.eql('No entry');
-        // Should have property entries
         done();
       });
   });
@@ -118,7 +113,6 @@ describe('Testing Routes to make sure they are successful', () => {
       });
   });
   after(() => {
-    // Empty all datas in the database
     QueryHelper.emptyTable('entries');
   });
 });
