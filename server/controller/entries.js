@@ -187,7 +187,7 @@ class EntriesController {
  */
   static deleteEntry(req, res) {
     const { entriesId } = req.params;
-    const deleteEntryQuery = `DELETE FROM entries WHERE entriesId = '${entriesId}' AND userId = '${req.decoded.userId}' RETURNING *;`;
+    const deleteEntryQuery = `DELETE FROM entries WHERE entriesId = '${parseInt(entriesId, 10)}' AND userId = '${req.decoded.userId}' RETURNING *;`;
 
     pool.query(deleteEntryQuery, (err, result) => {
       if (result.rowCount < 1) {

@@ -58,8 +58,8 @@ class AuthController {
     const saltRound = Math.floor(Math.random() * 5);
     const salt = bcrypt.genSaltSync(saltRound);
     const password = bcrypt.hashSync(plainPassword, salt);
-
-    pool.query(`INSERT INTO users (username, email, password, firstname, lastname) VALUES ('${username}', '${email}', '${password}', '${firstname}', '${lastname}') RETURNING *;`, (err, result) => {
+    const insertQuery = `INSERT INTO users (username, email, password, firstname, lastname) VALUES ('${username}', '${email}', '${password}', '${firstname}', '${lastname}') RETURNING *;`;
+    pool.query(insertQuery, (err, result) => {
       if (err) {
         return res.status(500).json({
           message: 'Server error has occured!',
