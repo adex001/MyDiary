@@ -28,7 +28,7 @@ class TokenHandler {
  */
 
   static verifyToken(req, res, next) {
-    const token = req.headers.authorization;
+    const { token } = req.headers;
     // Check if it exists
     if (typeof token === 'undefined') {
       return res.status(401).json({

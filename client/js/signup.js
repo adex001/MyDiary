@@ -30,8 +30,13 @@ const signUp = ((e) => {
     .then((resultObject) => {
       console.log(`My result Object ${resultObject}`);
       console.log(resultObject);
-      console.log(resultObject.token);
-      localStorage.setItem('token', resultObject.token);
+      if (resultObject.status === 'true') {
+        localStorage.setItem('token', resultObject.token);
+        // return window.location.replace('/UI/dashboard.html');
+      }
+      // Display error message 
+      return console.log(resultObject.message);
+
     });
 });
 

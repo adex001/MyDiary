@@ -14,7 +14,7 @@ class AuthController {
  */
   static login(req, res) {
     const { email, plainPassword } = req.body;
-    pool.query(`SELECT * from users WHERE email = '${email}' OR username = '${email}'`, (err, result) => {
+    pool.query(`SELECT * from users WHERE email = '${email}'`, (err, result) => {
       if (err) {
         return res.status(500).json({
           message: 'Login failed!',
@@ -28,12 +28,16 @@ class AuthController {
       }
       const isCorrectPassword = bcrypt.compareSync(plainPassword, result.rows[0].password);
       if (!isCorrectPassword) {
-        return res.status(401).json({
+        return res.status(400).json({
           message: 'Login failed!',
         });
       }
-      const loginToken = TokenHandler.createToken({ id: result.rows[0].userId });
+      const payload = {
+        userId: result.rows[0].userid,
+      };
+      const loginToken = TokenHandler.createToken(payload);
       return res.status(200).json({
+        status: 'true',
         message: 'Token created',
         loginToken,
       });
@@ -57,7 +61,7 @@ class AuthController {
 
 
     // Insert object into database
-    pool.query(`INSERT INTO users (username, email, password, firstname, lastname) VALUES ( '${username}', '${email}', '${password}', '${firstname}', '${lastname}') RETURNING *;`, (err, result) => {
+    pool.query(`INSERT INTO users (username, email, password, firstname, lastname) VALUES ('${username}', '${email}', '${password}', '${firstname}', '${lastname}') RETURNING *;`, (err, result) => {
       // pool.end(); // returns the pool back.
       if (err) {
         return res.status(500).json({
@@ -69,9 +73,10 @@ class AuthController {
       };
       const token = TokenHandler.createToken(payload);
       return res.status(201).json({
+        status: 'true',
         message: 'User signed up and token created',
         token,
-        result,
+
       });
     });
     return null;
