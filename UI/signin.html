@@ -34,9 +34,9 @@
     <section>
       <div class="container">
         <h2 class="logindesc">Sign in to Diary</h2>
-        <form class="myform" action="dashboard.html" method="GET">
-          <label for="user">Email or Username </label><input type="text" class="forminput" value="" placeholder="abc123" required><br>
-          <label for="password">Password</label> <input type="password" class="forminput" value="" placeholder="enter password" required> <br>
+        <form class="myform" action="dashboard.html" method="POST">
+          <label for="user">Email </label><input type="text" class="forminput" placeholder="abc123" id="email" required><br>
+          <label for="password">Password</label> <input type="password" class="forminput" placeholder="enter password" id="plainPassword" required> <br>
           <input type="submit" class="submit" id="loginbutton" value="sign in">
           <p>forgot password?? click <span><a href="./forgotpassword.html">here</a></span></p>
           <p>Not registered? <span><a href="./signup.html">sign up</a></span></p>
@@ -51,5 +51,6 @@
           <p>(c) Olatunbosun Adeoye 2018.</p>
         </div>
       </footer>
+      <script src="../client/js/signin.js"></script>
 </body>
 </html>

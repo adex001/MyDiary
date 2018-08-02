@@ -70,8 +70,7 @@ class EntriesController {
   * @returns {*} Email notification
   */
   static fetchPublicEntries(req, res) {
-    const visibility = 'public';
-    const publicQuery = `SELECT * FROM entries WHERE visibility = '${visibility}'`;
+    const publicQuery = 'SELECT * FROM entries WHERE visibility = "public"';
     pool.query(publicQuery, (err, result) => {
       if (err) {
         return res.status(500).json({
