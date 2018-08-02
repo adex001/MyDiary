@@ -35,11 +35,11 @@ class TokenHandler {
         message: 'No token provided!',
       });
     }
-    try {
-      const decoded = jwt.verify(token, process.env.SECRET_KEY);
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+    if (decoded) {
       req.decoded = decoded;
-    } catch (err) {
-      return res.status(401).json('Token cannot be verified');
+    } else {
+      res.status(401).json('Token cannot be verified');
     }
     return next();
   }

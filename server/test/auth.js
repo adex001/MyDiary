@@ -3,6 +3,7 @@ import chaiHttp from 'chai-http';
 import { it, describe } from 'mocha';
 
 import app from '../app';
+import QueryHelper from '../utilities/queryhelper';
 
 app.use(chaiHttp);
 chai.should();
@@ -26,19 +27,18 @@ const mockRegisterUser = {
   email: 'testing@testing.com',
   firstname: 'Ayobami',
   lastname: 'Ebenezer',
-  username: 'adex001',
+  username: 'adextest1',
   plainPassword: 'password',
 };
 const mockErrorUser = {
   email: 'error@error.com',
   plainPassword: 'password',
 };
-
+QueryHelper.emptyTable('users');
 describe('Testing the POST /auth/signup route to CREATE A USER', () => {
-  it('It should return a status of 201 when creating a new user', (done) => {
+  it('should return a status of 201 when creating a new user', (done) => {
     chai.request(app)
       .post('/api/v1/auth/signup')
-      .set('Accept', 'application/json')
       .send(mockRegisterUser)
       .end((err, response) => {
         response.should.have.status(201);
@@ -50,11 +50,10 @@ describe('Testing the POST /auth/signup route to CREATE A USER', () => {
   it('It should not create a user with no email', (done) => {
     chai.request(app)
       .post('/api/v1/auth/signup')
-      .set('Accept', 'application/json')
       .send(noEmail)
       .end((err, response) => {
         response.should.have.status(400);
-        response.body.message.should.eql('Enter a valid email!');
+        response.body.message.should.eql('Enter a valid email');
         done();
       });
   });
@@ -64,7 +63,6 @@ describe('Testing the POST /auth route to LOGIN A USER', () => {
   it('Validation should fail if user wasn\'t found', (done) => {
     chai.request(app)
       .post('/api/v1/auth/login')
-      .set('Accept', 'application/json')
       .send(mockErrorUser)
       .end((err, response) => {
         response.should.have.status(404);
@@ -76,7 +74,6 @@ describe('Testing the POST /auth route to LOGIN A USER', () => {
   it('Login should be successful with correct details', (done) => {
     chai.request(app)
       .post('/api/v1/auth/login')
-      .set('Accept', 'application/json')
       .send(usertest)
       .end((err, response) => {
         response.should.have.status(200);
@@ -87,12 +84,12 @@ describe('Testing the POST /auth route to LOGIN A USER', () => {
   it('Validation fails with incorrect password!!', (done) => {
     chai.request(app)
       .post('/api/v1/auth/login')
-      .set('Accept', 'application/json')
       .send(wrongPassword)
       .end((err, response) => {
-        response.should.have.status(401);
+        response.should.have.status(400);
         response.body.message.should.eql('Login failed!');
         done();
       });
   });
 });
+QueryHelper.emptyTable('users');

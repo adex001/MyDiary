@@ -21,7 +21,7 @@ class EntriesController {
         });
       }
       if (result.rowCount < 1) {
-        return res.status(404).json({
+        return res.status(200).json({
           message: 'No entry',
         });
       }
@@ -125,8 +125,13 @@ class EntriesController {
       entryTitle, entry, visibility,
     } = req.body;
 
-    const createEntryQuery = `INSERT INTO entries (entry, entryTitle, visibility, userId) VALUES ('${entry}', '${entryTitle}', '${visibility}', '${req.decoded.userId}');`;
+    const createEntryQuery = `INSERT INTO entries (entry, entryTitle, visibility, userId) VALUES ('${entry}', '${entryTitle}', '${visibility}', ${req.decoded.userId});`;
     pool.query(createEntryQuery, (err, result) => {
+      if (err) {
+        return res.status(500).json({
+          message: err.message,
+        });
+      }
       if (result.rowCount < 1) {
         return res.status(400).json({
           message: 'Cannot create entry',
