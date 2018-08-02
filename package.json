@@ -31,7 +31,6 @@
     "express": "^4.16.3",
     "jsonwebtoken": "^8.3.0",
     "mocha": "^5.2.0",
-    "moment": "^2.22.2",
     "pg": "^7.4.3",
     "validator": "^10.4.0"
   },

@@ -14,23 +14,25 @@ class EntriesController {
   static fetchEntries(req, res) {
     // retrieve all entries from the database FOR NOW!!!.
     const fetchEntryQuery = `SELECT * FROM entries WHERE userid = '${req.decoded.userId}';`;
-    try {
-      pool.query(fetchEntryQuery, (err, result) => {
-        if (result.rowCount < 1) {
-          return res.status(404).json({
-            message: 'No entry',
-          });
-        }
-        return res.status(200).json({
-          message: 'All entries by users',
-          entries: result.rows,
+    pool.query(fetchEntryQuery, (err, result) => {
+      if (err) {
+        return res.status(500).json({
+          message: 'Something went wrong!',
+          err: req.decoded.userId,
         });
+      }
+      if (result.rowCount < 1) {
+        return res.status(404).json({
+          message: 'No entry',
+        });
+      }
+      return res.status(200).json({
+        status: 'true',
+        message: 'All entries by users',
+        entries: result.rows,
       });
-    } catch (err) {
-      return res.status(500).json({
-        message: 'Something went wrong!',
-      });
-    }
+    });
+
     return null;
   } /**
   * @function fetchEntries
@@ -42,24 +44,23 @@ class EntriesController {
   static fetchSingleEntry(req, res) {
     const { entriesId } = req.params;
     const findEntryQuery = `SELECT * FROM entries WHERE entriesId = '${entriesId}' AND userid = '${req.decoded.userId}';`;
-
-    try {
-      pool.query(findEntryQuery, (err, result) => {
-        if (result.rowCount < 1) {
-          return res.status(404).json({
-            message: 'No such entry',
-          });
-        }
-        return res.status(200).json({
-          message: 'Entry found',
-          entry: result.rows[0],
+    pool.query(findEntryQuery, (err, result) => {
+      if (err) {
+        return res.status(500).json({
+          message: 'Something went wrong!',
         });
+      }
+      if (result.rowCount < 1) {
+        return res.status(404).json({
+          message: 'No such entry',
+        });
+      }
+      return res.status(200).json({
+        status: 'true',
+        message: 'Entry found',
+        entry: result.rows[0],
       });
-    } catch (err) {
-      return res.status(500).json({
-        message: 'Something went wrong!',
-      });
-    }
+    });
     return null;
   }
 
@@ -70,8 +71,7 @@ class EntriesController {
   * @returns {*} Email notification
   */
   static fetchPublicEntries(req, res) {
-    const visibility = 'public';
-    const publicQuery = `SELECT * FROM entries WHERE visibility = '${visibility}'`;
+    const publicQuery = 'SELECT * FROM entries WHERE visibility = "public"';
     pool.query(publicQuery, (err, result) => {
       if (err) {
         return res.status(500).json({
@@ -79,6 +79,7 @@ class EntriesController {
         });
       }
       return res.status(200).json({
+        status: 'true',
         message: 'All public entries',
         entries: result.rows,
       });
@@ -106,6 +107,7 @@ class EntriesController {
         });
       }
       return res.status(200).json({
+        status: 'true',
         message: 'Single Public Entry',
         publicEntry: result.rows,
       });
@@ -132,6 +134,7 @@ class EntriesController {
         });
       }
       return res.status(201).json({
+        status: 'true',
         message: 'Entries created successfully',
         entry: result.rows[0],
       });
@@ -164,6 +167,7 @@ class EntriesController {
         });
       }
       return res.status(200).json({
+        status: 'true',
         message: 'successfully updated',
         entry: result.rows[0],
       });
@@ -188,6 +192,7 @@ class EntriesController {
         });
       }
       return res.status(200).json({
+        status: 'true',
         message: 'Entry Deleted!!',
         entryDeleted: result.rows[0],
       });
@@ -211,6 +216,7 @@ class EntriesController {
         });
       }
       res.status(200).json({
+        status: 'true',
         message: 'Entries count',
         count: result.rows[0].count,
 

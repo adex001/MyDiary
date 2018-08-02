@@ -34,13 +34,13 @@
     <section>
       <div class="container">
         <h2 class="logindesc">Register Diary</h2>
-        <form class="myform" action="dashboard.html" method="GET">
-          <label for="firstname">Firstname </label><input type="text" class="forminput" value="" placeholder="Mary" required><br>
-          <label for="lastname">Lastname</label> <input type="text" class="forminput" value="" placeholder="Georgia"> <br>
-          <label for="user">Username </label><input type="text" class="forminput" value="" placeholder="abc123" required><br>
-          <label for="user">Email Address </label><input type="email" class="forminput" value="" placeholder="abc123@abc.com" required><br>
-          <label for="password">Password</label> <input type="password" class="forminput" value="" placeholder="enter password" required> <br>
-          <label for="password2">Re-enter Password</label> <input type="password" class="forminput" value="" placeholder="re-enter password" > <br>
+        <form class="myform" action="dashboard.html" method="POST">
+          <label for="firstname">Firstname </label><input type="text" class="forminput" placeholder="Mary" id='firstname' required><br>
+          <label for="lastname">Lastname</label> <input type="text" class="forminput"  placeholder="Georgia" id="lastname"> <br>
+          <label for="user">Username </label><input type="text" class="forminput"  placeholder="abc123" id="username" required><br>
+          <label for="user">Email Address </label><input type="email" class="forminput"  placeholder="abc123@abc.com" id="email" required><br>
+          <label for="password">Password</label> <input type="password" class="forminput" placeholder="enter password" id="plainPassword" required> <br>
+          <label for="password2">Re-enter Password</label> <input type="password" class="forminput" placeholder="re-enter password" id="password2" > <br>
           <input type="submit" class="submit" id="loginbutton" value="register">
           <p>Already registered? <span><a href="./signin.html">sign in</a></span></p>
           
@@ -54,5 +54,6 @@
           <p>(c) Olatunbosun Adeoye 2018.</p>
         </div>
       </footer>
+<script src="../client/js/signup.js"></script>
 </body>
 </html>
