@@ -84,6 +84,34 @@ class EntriesController {
       });
     });
   }
+
+  /**
+  * @function fetchEntries
+  * @param {*} req
+  * @param {*} res
+  * @returns {*} Email notification
+  */
+  static fetchSinglePublicEntry(req, res) {
+    const { entriesId } = req.params;
+    const publicQuery = `SELECT * FROM entries WHERE entriesId = '${entriesId}' AND visibility = 'public'`;
+    pool.query(publicQuery, (err, result) => {
+      if (err) {
+        return res.status(500).json({
+          message: 'internal server error',
+        });
+      }
+      if (result.rowCount < 1) {
+        return res.status(404).json({
+          message: 'This is pure hacking!',
+        });
+      }
+      return res.status(200).json({
+        message: 'Single Public Entry',
+        publicEntry: result.rows,
+      });
+    });
+  }
+
   /**
  * @function createEntry
  * @param {*} req

@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
+import cors from 'cors';
 
 import entriesRoute from './routes/entries';
 import authRoute from './routes/auth';
@@ -11,12 +12,12 @@ import userRoute from './routes/user';
 dotenv.config();
 
 const app = express();
-
 // App to Use these middlewares
 
-// Configure body-parser
+// Configure body-parser and cors
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(cors());
 
 // Register routes
 app.use('/api/v1/entries', entriesRoute);
