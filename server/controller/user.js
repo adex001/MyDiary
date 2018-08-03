@@ -22,6 +22,11 @@ class UserController {
     }
     const query = `SELECT * FROM users WHERE email = '${email}'`;
     pool.query(query, (err, result) => {
+      if(err) {
+        return res.status(500).json({
+          message: 'internal server error',
+        });
+      }
       if (result.rowCount < 1) {
         return res.status(404).json({
           message: 'No such email',

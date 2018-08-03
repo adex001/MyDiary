@@ -17,11 +17,10 @@ class EntriesController {
       if (err) {
         return res.status(500).json({
           message: 'Something went wrong!',
-          err: req.decoded.userId,
         });
       }
       if (result.rowCount < 1) {
-        return res.status(404).json({
+        return res.status(200).json({
           message: 'No entry',
         });
       }
@@ -125,8 +124,13 @@ class EntriesController {
       entryTitle, entry, visibility,
     } = req.body;
 
-    const createEntryQuery = `INSERT INTO entries (entry, entryTitle, visibility, userId) VALUES ('${entry}', '${entryTitle}', '${visibility}', '${req.decoded.userId}');`;
+    const createEntryQuery = `INSERT INTO entries (entry, entryTitle, visibility, userId) VALUES ('${entry}', '${entryTitle}', '${visibility}', ${req.decoded.userId});`;
     pool.query(createEntryQuery, (err, result) => {
+      if (err) {
+        return res.status(500).json({
+          message: 'Internal server error! Are you sure you have account with us?',
+        });
+      }
       if (result.rowCount < 1) {
         return res.status(400).json({
           message: 'Cannot create entry',
@@ -160,7 +164,7 @@ class EntriesController {
           message: 'internal server error',
         });
       }
-      if (result.rowCount < 0) {
+      if (result.rowCount < 1) {
         return res.status(404).json({
           message: 'entry not found',
         });
@@ -182,7 +186,7 @@ class EntriesController {
  */
   static deleteEntry(req, res) {
     const { entriesId } = req.params;
-    const deleteEntryQuery = `DELETE FROM entries WHERE entriesId = '${entriesId}' AND userId = '${req.decoded.userId}' RETURNING *;`;
+    const deleteEntryQuery = `DELETE FROM entries WHERE entriesId = '${parseInt(entriesId, 10)}' AND userId = '${req.decoded.userId}' RETURNING *;`;
 
     pool.query(deleteEntryQuery, (err, result) => {
       if (result.rowCount < 1) {

@@ -2,6 +2,8 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import swaggerUi from 'swagger-ui-express';
+import yaml from 'yamljs';
 
 import entriesRoute from './routes/entries';
 import authRoute from './routes/auth';
@@ -13,7 +15,8 @@ dotenv.config();
 
 const app = express();
 // App to Use these middlewares
-
+const swaggerDoc = yaml.load(`${process.cwd()}/swagger.yaml`);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 // Configure body-parser and cors
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
