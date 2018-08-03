@@ -1,5 +1,12 @@
 const baseAPI = 'http://localhost:4000/api/v1';
 const saveButton = document.getElementById('savebutton');
+const logoutButton = document.getElementsByClassName('signout');
+
+const logout = ((e) => {
+  e.preventDefault();
+  localStorage.removeItem('token');
+  window.location.replace('/UI/entries.html');
+});
 const addEntry = ((e) => {
   e.preventDefault();
   const entryText = document.getElementById('entry').value;
@@ -29,3 +36,4 @@ const addEntry = ((e) => {
     });
 });
 saveButton.addEventListener('click', addEntry);
+logoutButton.addEventListener('click', logout);
