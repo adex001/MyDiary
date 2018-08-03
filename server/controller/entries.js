@@ -12,7 +12,6 @@ class EntriesController {
  * @returns {*} All specific user entries
  */
   static fetchEntries(req, res) {
-    // retrieve all entries from the database FOR NOW!!!.
     const fetchEntryQuery = `SELECT * FROM entries WHERE userid = '${req.decoded.userId}';`;
     pool.query(fetchEntryQuery, (err, result) => {
       if (err) {

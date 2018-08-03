@@ -1,10 +1,7 @@
 import pg from 'pg';
 import dotenv from 'dotenv';
 
-// Configure dotenv
 dotenv.config();
-
-// Create configurations for database
 const dataConfig = {
   database: process.env.DB_NAME,
   host: process.env.DB_HOST,
@@ -52,9 +49,6 @@ const createTableReminder = `CREATE TABLE IF NOT EXISTS reminders (
 )`;
 // eslint-disable-next-line
 pool.query(`${createTableUsers}; ${createTableEntries}; ${createTableReminder};`, (err, response) => {
-  if (err) {
-    console.log('Cannot connect to database');
-  }
   console.log('Users and Entries Table Created!!');
   console.log(`node_env: ${process.env.NODE_ENV}`);
 });

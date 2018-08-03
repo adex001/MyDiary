@@ -9,8 +9,9 @@ const signUp = ((e) => {
   const lastnameText = document.getElementById('lastname').value;
   const plainPasswordText = document.getElementById('plainPassword').value;
   const password2Text = document.getElementById('password2').value;
-  console.log(firstnameText);
-  console.log(emailText);
+  if (plainPasswordText !== password2Text) {
+    return console.log('Password does not match');
+  }
   const signupObject = {
     email: emailText,
     username: usernameText,
@@ -28,15 +29,10 @@ const signUp = ((e) => {
   })
     .then(response => response.json())
     .then((resultObject) => {
-      console.log(`My result Object ${resultObject}`);
-      console.log(resultObject);
       if (resultObject.status === 'true') {
         localStorage.setItem('token', resultObject.token);
-        // return window.location.replace('/UI/dashboard.html');
+        window.location.replace('/UI/dashboard.html');
       }
-      // Display error message 
-      return console.log(resultObject.message);
-
     });
 });
 

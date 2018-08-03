@@ -45,16 +45,16 @@
       <div class="container">
         <div class="maindescription">
           <h2> A new Entry </h2>
-          <form class="form-entry" method="POST" action="#">
-            <label>Title</label> <input type="text" placeholder="Enter entry title" class="entrytitle"><br>
-            <label>Entry</label>  <textarea rows="20" cols="80" placeholder="Enter story here" class="entrytextarea"></textarea><br>
+          <form class="form-entry" method="POST">
+            <label>Title</label> <input type="text" placeholder="Enter entry title" class="entrytitle" id="entrytitle"><br>
+            <label>Entry</label>  <textarea rows="20" cols="80" placeholder="Enter story here" class="entrytextarea" id="entry"></textarea><br>
             <p>entry visibility is private by default</p>
-            <select class="select">
+            <select class="select" id="visibility">
               <option disabled>Visibility</option>
-              <option>Private</option>
-              <option>Public</option>
+              <option value="private">Private</option>
+              <option value="public">Public</option>
             </select>
-            <button class="savebutton">Save</button> <button class="clearbutton">Clear</button>
+            <button id="savebutton" class="savebutton">Save</button> <button class="clearbutton">Clear</button>
           </form>
         </div>
       </div>
@@ -70,6 +70,6 @@
     </div>
   </footer>
 
-  <script src="./js/ui.js"></script>
+  <script src="../client/js/addentry.js"></script>
 </body>
 </html>

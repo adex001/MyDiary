@@ -19,15 +19,10 @@ const signIn = ((e) => {
   })
     .then(response => response.json())
     .then((resultObject) => {
-      console.log(resultObject);
       if (resultObject.status === 'true') {
         localStorage.setItem('token', resultObject.loginToken);
-        return window.location.replace('/UI/dashboard.html');
+        window.location.replace('/UI/dashboard.html');
       }
-
-      return console.log(resultObject.message);
-      // display error and resirect bact to itself
-      // return window.location.replace('/UI/signin.html');
     });
 });
 

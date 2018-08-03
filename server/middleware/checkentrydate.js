@@ -15,7 +15,7 @@ const checkEntryDate = ((req, res, next) => {
     if (entryCreated.getDate() === today.getDate() && serverHour <= 24) {
       return next();
     }
-    return next(); // Should return a response of not able to process the request
+    return next();
   });
 });
 export default checkEntryDate;

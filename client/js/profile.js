@@ -1,5 +1,5 @@
 const baseAPI = 'http://localhost:4000/api/v1';
-fetch(`${baseAPI}/entries`, {
+fetch(`${baseAPI}/entries/count`, {
   method: 'GET',
   headers: {
     Accept: 'application/json, text/plain, */*',
@@ -8,7 +8,8 @@ fetch(`${baseAPI}/entries`, {
   },
 })
   .then(response => response.json())
-  .then((resultObject) => {
-    if (resultObject.status === 'true') {
-    }
-  });
+  .then((countResult) => {
+    const countSpan = document.getElementById('mycount');
+    countSpan.innerHTML = countResult.count;
+  })
+;

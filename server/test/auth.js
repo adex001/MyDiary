@@ -2,10 +2,8 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import { it, describe } from 'mocha';
 
-// import app
 import app from '../app';
 
-// configure app
 app.use(chaiHttp);
 chai.should();
 const usertest = {
