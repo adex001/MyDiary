@@ -1611,7 +1611,7 @@ padding: 15px;
 }
 @media (min-width: 1024px) and (min-height: 700px){
   footer{
-    position: absolute;
+    position: unset;
     bottom: 0;
     width: 100%;
   }

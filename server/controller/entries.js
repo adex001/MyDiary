@@ -128,7 +128,7 @@ class EntriesController {
     pool.query(createEntryQuery, (err, result) => {
       if (err) {
         return res.status(500).json({
-          message: err.message,
+          message: 'Internal server error! Are you sure you have account with us?',
         });
       }
       if (result.rowCount < 1) {

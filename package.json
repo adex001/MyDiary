@@ -32,7 +32,9 @@
     "jsonwebtoken": "^8.3.0",
     "mocha": "^5.2.0",
     "pg": "^7.4.3",
-    "validator": "^10.4.0"
+    "swagger-ui-express": "^3.0.10",
+    "validator": "^10.4.0",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

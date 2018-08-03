@@ -93,20 +93,20 @@ describe('Testing Routes to make sure they are successful', () => {
         done();
       });
   });
-  it('Should modify entry', (done) => {
+  it('Should not modify entry', (done) => {
     const modifyEntry = {
       entryTitle: 'Edited Another good man',
       entry: ' Modified lorem ipsor extra',
       visibility: 'public',
     };
     chai.request(app)
-      .put('/api/v1/entries/2')
+      .put('/api/v1/entries/9236329')
       .set('Accept', 'application/json')
       .set('token', `${token}`)
       .send(modifyEntry)
       .end((err, response) => {
-        response.should.have.status(200);
-        response.body.message.should.eql('successfully updated');
+        response.should.have.status(404);
+        response.body.message.should.eql('entry not found');
         done();
       });
   });
