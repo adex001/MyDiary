@@ -17,7 +17,6 @@ class EntriesController {
       if (err) {
         return res.status(500).json({
           message: 'Something went wrong!',
-          err: req.decoded.userId,
         });
       }
       if (result.rowCount < 1) {
@@ -165,7 +164,7 @@ class EntriesController {
           message: 'internal server error',
         });
       }
-      if (result.rowCount < 0) {
+      if (result.rowCount < 1) {
         return res.status(404).json({
           message: 'entry not found',
         });
