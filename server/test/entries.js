@@ -64,7 +64,7 @@ describe('Testing Routes to make sure they are successful', () => {
     const goodEntry = {
       entryTitle: 'A good man',
       entry: 'lorem ipsor',
-      visibility: 'private',
+      visibility: 'true',
     };
     chai.request(app)
       .post('/api/v1/entries')
@@ -81,7 +81,7 @@ describe('Testing Routes to make sure they are successful', () => {
     const goodEntry1 = {
       entryTitle: 'Another good man',
       entry: 'lorem ipsor extra',
-      visibility: 'public',
+      visibility: 'false',
     };
     chai.request(app)
       .post('/api/v1/entries')
@@ -97,7 +97,7 @@ describe('Testing Routes to make sure they are successful', () => {
     const modifyEntry = {
       entryTitle: 'Edited Another good man',
       entry: ' Modified lorem ipsor extra',
-      visibility: 'public',
+      visibility: 'true',
     };
     chai.request(app)
       .put('/api/v1/entries/9236329')
