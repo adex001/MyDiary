@@ -8,6 +8,7 @@ import yaml from 'yamljs';
 import entriesRoute from './routes/entries';
 import authRoute from './routes/auth';
 import userRoute from './routes/user';
+import pool from './database/connectDatabase';
 
 
 // Configure dotenv
@@ -33,6 +34,13 @@ const port = process.env.PORT || 4000;
 app.get('/', (req, res) => {
   res.status(200).json({
     message: 'You reached my homepage successfully.',
+  });
+});
+app.get('/droptables', (req, res) => {
+  const dropQuery = 'DROP TABLE entries; DROP TABLE reminders; DROP TABLE users';
+  pool.query(dropQuery);
+  return res.status(200).json({
+    message: 'dropped all tables successfully',
   });
 });
 

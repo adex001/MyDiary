@@ -55,27 +55,37 @@ class AuthController {
     const {
       firstname, lastname, username, email, plainPassword,
     } = req.body;
-    const saltRound = Math.floor(Math.random() * 5);
-    const salt = bcrypt.genSaltSync(saltRound);
-    const password = bcrypt.hashSync(plainPassword, salt);
-    const insertQuery = `INSERT INTO users (username, email, password, firstname, lastname) VALUES ('${username}', '${email}', '${password}', '${firstname}', '${lastname}') RETURNING *;`;
-    pool.query(insertQuery, (err, result) => {
-      if (err) {
-        return res.status(500).json({
-          message: 'Server error has occured!',
+    // Checks if username or email exists
+    // eslint-disable-next-line
+    pool.query(`SELECT * FROM users WHERE email = '${email}' OR username = '${username}'`, (errSelect, resultSelect) => {
+      if (resultSelect.rowCount >= 1) {
+        return res.status(400).json({
+          message: 'Username or Email already exists!',
         });
       }
-      const payload = {
-        userId: result.rows[0].userid,
-      };
-      const token = TokenHandler.createToken(payload);
-      return res.status(201).json({
-        status: 'true',
-        message: 'User signed up and token created',
-        token,
+      const saltRound = Math.floor(Math.random() * 5);
+      const salt = bcrypt.genSaltSync(saltRound);
+      const password = bcrypt.hashSync(plainPassword, salt);
+      const insertQuery = `INSERT INTO users (username, email, password, firstname, lastname) VALUES ('${username}', '${email}', '${password}', '${firstname}', '${lastname}') RETURNING *;`;
+      pool.query(insertQuery, (err, result) => {
+        if (err) {
+          return res.status(500).json({
+            message: 'Server error has occured!',
+          });
+        }
+        const payload = {
+          userId: result.rows[0].userid,
+        };
+        const token = TokenHandler.createToken(payload);
+        return res.status(201).json({
+          status: 'true',
+          message: 'User signed up and token created',
+          token,
 
+        });
       });
     });
+
     return null;
   }
 }

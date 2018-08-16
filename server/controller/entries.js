@@ -50,6 +50,7 @@ class EntriesController {
       }
       if (result.rowCount < 1) {
         return res.status(404).json({
+          status: 'empty',
           message: 'No such entry',
         });
       }
@@ -69,7 +70,7 @@ class EntriesController {
   * @returns {*} Email notification
   */
   static fetchPublicEntries(req, res) {
-    const publicQuery = 'SELECT * FROM entries WHERE visibility = "public"';
+    const publicQuery = 'SELECT * FROM entries WHERE visibility = true';
     pool.query(publicQuery, (err, result) => {
       if (err) {
         return res.status(500).json({
@@ -92,7 +93,7 @@ class EntriesController {
   */
   static fetchSinglePublicEntry(req, res) {
     const { entriesId } = req.params;
-    const publicQuery = `SELECT * FROM entries WHERE entriesId = '${entriesId}' AND visibility = 'public'`;
+    const publicQuery = `SELECT * FROM entries WHERE entriesId = '${entriesId}' AND visibility = true`;
     pool.query(publicQuery, (err, result) => {
       if (err) {
         return res.status(500).json({
@@ -124,7 +125,7 @@ class EntriesController {
       entryTitle, entry, visibility,
     } = req.body;
 
-    const createEntryQuery = `INSERT INTO entries (entry, entryTitle, visibility, userId) VALUES ('${entry}', '${entryTitle}', '${visibility}', ${req.decoded.userId});`;
+    const createEntryQuery = `INSERT INTO entries (entry, entryTitle, visibility, userId) VALUES ('${entry}', '${entryTitle}', '${visibility}', '${req.decoded.userId}') RETURNING *;`;
     pool.query(createEntryQuery, (err, result) => {
       if (err) {
         return res.status(500).json({
@@ -139,7 +140,6 @@ class EntriesController {
       return res.status(201).json({
         status: 'true',
         message: 'Entries created successfully',
-        entry: result.rows[0],
       });
     });
   }
@@ -172,7 +172,6 @@ class EntriesController {
       return res.status(200).json({
         status: 'true',
         message: 'successfully updated',
-        entry: result.rows[0],
       });
     });
     return null;
