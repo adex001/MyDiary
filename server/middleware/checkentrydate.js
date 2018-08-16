@@ -17,8 +17,6 @@ const checkEntryDate = ((req, res, next) => {
     }
     const entryCreated = new Date(result.rows[0].timecreated);
     const today = new Date();
-    console.log(today.getDate());
-    console.log(entryCreated.getDate());
     if (entryCreated.getDate() === today.getDate()) {
       return next();
     }
