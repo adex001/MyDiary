@@ -157,11 +157,13 @@ class EntriesController {
       entryTitle, entry, visibility,
     } = req.body;
     // Update SQL query
-    const updateEntryQuery = `UPDATE entries SET entryTitle = '${entryTitle}', entry = '${entry}', visibility = '${visibility}' WHERE entriesId = '${parseInt(entriesId, 10)}' AND userId = '${req.decoded.userId}' RETURNING *;`;
+    const modifiedDate = Date.now();
+    const updateEntryQuery = `UPDATE entries SET entryTitle = '${entryTitle}', entry = '${entry}', visibility = '${visibility}', timemodified = to_timestamp('${modifiedDate / 1000}') WHERE entriesId = '${parseInt(entriesId, 10)}' AND userId = '${req.decoded.userId}' RETURNING *;`;
     pool.query(updateEntryQuery, (err, result) => {
       if (err) {
         return res.status(500).json({
           message: 'internal server error',
+          err,
         });
       }
       if (result.rowCount < 1) {
