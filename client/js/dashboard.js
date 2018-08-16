@@ -9,6 +9,7 @@ fetch(`${baseAPI}/entries`, {
 })
   .then(response => response.json())
   .then((resultObject) => {
+    console.log(resultObject);
     if (resultObject.status === 'true') {
     }
   });
