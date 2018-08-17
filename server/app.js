@@ -36,13 +36,6 @@ app.get('/', (req, res) => {
     message: 'You reached my homepage successfully.',
   });
 });
-app.get('/droptables', (req, res) => {
-  const dropQuery = 'DROP TABLE entries; DROP TABLE reminders; DROP TABLE users';
-  pool.query(dropQuery);
-  return res.status(200).json({
-    message: 'dropped all tables successfully',
-  });
-});
 
 app.listen(port, () => {
   // eslint-disable-next-line
