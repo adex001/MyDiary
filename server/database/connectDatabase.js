@@ -49,18 +49,11 @@ const createTableReminder = `CREATE TABLE IF NOT EXISTS reminders (
 )`;
 // eslint-disable-next-line
 
-const dropTables = () => {
-  pool.query('DROP TABLE users; DROP TABLE entries; DROP TABLE reminders;', (err, res) => {
-    console.log('All tables dropped!!');
-  });
-};
-
 const createTables = () => {
   pool.query(`${createTableUsers}; ${createTableEntries}; ${createTableReminder};`, (err, response) => {
     console.log('Users and Entries Table Created!!');
     console.log(`node_env: ${process.env.NODE_ENV}`);
   });
 };
-dropTables();
 createTables();
 export default pool;
