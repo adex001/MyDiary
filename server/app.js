@@ -8,6 +8,7 @@ import yaml from 'yamljs';
 import entriesRoute from './routes/entries';
 import authRoute from './routes/auth';
 import userRoute from './routes/user';
+import pool from './database/connectDatabase';
 
 
 // Configure dotenv

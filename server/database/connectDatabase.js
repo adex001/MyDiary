@@ -37,7 +37,7 @@ const createTableEntries = `CREATE TABLE IF NOT EXISTS entries (
   entryTitle varchar(50) NOT NULL,
   entry varchar(1000) NOT NULL,
   userId serial REFERENCES users(userId),
-  visibility varchar(10) NOT NULL,
+  visibility boolean NOT NULL,
   timeCreated TIMESTAMP NOT NULL DEFAULT NOW(),
   timeModified TIMESTAMP
 )`;
@@ -48,9 +48,12 @@ const createTableReminder = `CREATE TABLE IF NOT EXISTS reminders (
   reminderTime TIMESTAMP 
 )`;
 // eslint-disable-next-line
-pool.query(`${createTableUsers}; ${createTableEntries}; ${createTableReminder};`, (err, response) => {
-  console.log('Users and Entries Table Created!!');
-  console.log(`node_env: ${process.env.NODE_ENV}`);
-});
 
+const createTables = () => {
+  pool.query(`${createTableUsers}; ${createTableEntries}; ${createTableReminder};`, (err, response) => {
+    console.log('Users and Entries Table Created!!');
+    console.log(`node_env: ${process.env.NODE_ENV}`);
+  });
+};
+createTables();
 export default pool;

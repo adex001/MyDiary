@@ -50,6 +50,7 @@ class EntriesController {
       }
       if (result.rowCount < 1) {
         return res.status(404).json({
+          status: 'empty',
           message: 'No such entry',
         });
       }
@@ -69,7 +70,7 @@ class EntriesController {
   * @returns {*} Email notification
   */
   static fetchPublicEntries(req, res) {
-    const publicQuery = 'SELECT * FROM entries WHERE visibility = "public"';
+    const publicQuery = 'SELECT * FROM entries WHERE visibility = true';
     pool.query(publicQuery, (err, result) => {
       if (err) {
         return res.status(500).json({
@@ -92,7 +93,7 @@ class EntriesController {
   */
   static fetchSinglePublicEntry(req, res) {
     const { entriesId } = req.params;
-    const publicQuery = `SELECT * FROM entries WHERE entriesId = '${entriesId}' AND visibility = 'public'`;
+    const publicQuery = `SELECT * FROM entries WHERE entriesId = '${entriesId}' AND visibility = true`;
     pool.query(publicQuery, (err, result) => {
       if (err) {
         return res.status(500).json({
@@ -124,7 +125,7 @@ class EntriesController {
       entryTitle, entry, visibility,
     } = req.body;
 
-    const createEntryQuery = `INSERT INTO entries (entry, entryTitle, visibility, userId) VALUES ('${entry}', '${entryTitle}', '${visibility}', ${req.decoded.userId});`;
+    const createEntryQuery = `INSERT INTO entries (entry, entryTitle, visibility, userId) VALUES ('${entry}', '${entryTitle}', '${visibility}', '${req.decoded.userId}') RETURNING *;`;
     pool.query(createEntryQuery, (err, result) => {
       if (err) {
         return res.status(500).json({
@@ -139,7 +140,6 @@ class EntriesController {
       return res.status(201).json({
         status: 'true',
         message: 'Entries created successfully',
-        entry: result.rows[0],
       });
     });
   }
@@ -157,11 +157,13 @@ class EntriesController {
       entryTitle, entry, visibility,
     } = req.body;
     // Update SQL query
-    const updateEntryQuery = `UPDATE entries SET entryTitle = '${entryTitle}', entry = '${entry}', visibility = '${visibility}' WHERE entriesId = '${parseInt(entriesId, 10)}' AND userId = '${req.decoded.userId}' RETURNING *;`;
+    const modifiedDate = Date.now();
+    const updateEntryQuery = `UPDATE entries SET entryTitle = '${entryTitle}', entry = '${entry}', visibility = '${visibility}', timemodified = to_timestamp('${modifiedDate / 1000}') WHERE entriesId = '${parseInt(entriesId, 10)}' AND userId = '${req.decoded.userId}' RETURNING *;`;
     pool.query(updateEntryQuery, (err, result) => {
       if (err) {
         return res.status(500).json({
           message: 'internal server error',
+          err,
         });
       }
       if (result.rowCount < 1) {
@@ -172,7 +174,6 @@ class EntriesController {
       return res.status(200).json({
         status: 'true',
         message: 'successfully updated',
-        entry: result.rows[0],
       });
     });
     return null;

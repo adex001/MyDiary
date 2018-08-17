@@ -45,10 +45,10 @@ class InputValidators {
   }
 
   static validateEntryVisibility(visibility) {
-    if (typeof visibility === 'undefined' || validator.isEmpty(visibility)) {
-      return false;
+    if (visibility === 'true' || visibility === 'false') {
+      return true;
     }
-    return true;
+    return false;
   }
 
   static validateSex(sex) {

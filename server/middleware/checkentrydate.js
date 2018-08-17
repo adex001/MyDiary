@@ -9,21 +9,19 @@ const checkEntryDate = ((req, res, next) => {
         err,
       });
     }
-    console.log(result);
     if (result.rowCount < 1) {
       return res.status(404).json({
         status: 'false',
-        message: 'No entry to update'
+        message: 'No entry to update',
       });
     }
     const entryCreated = new Date(result.rows[0].timecreated);
     const today = new Date();
-    const serverHour = new Date().getHours();
-    if (entryCreated.getDate() === today.getDate() && serverHour <= 24) {
+    if (entryCreated.getDate() === today.getDate()) {
       return next();
     }
     return res.status(400).json({
-      message: 'cannot update entry. It"s too late',
+      message: 'cannot update entry. It\'s too late',
       status: 'false',
     });
   });

@@ -1,6 +1,7 @@
 const baseAPI = 'http://localhost:4000/api/v1';
+
 fetch(`${baseAPI}/entries`, {
-  method: 'GET',
+  METHOD: 'GET',
   headers: {
     Accept: 'application/json, text/plain, */*',
     'content-type': 'application/json',
@@ -10,6 +11,4 @@ fetch(`${baseAPI}/entries`, {
   .then(response => response.json())
   .then((resultObject) => {
     console.log(resultObject);
-    if (resultObject.status === 'true') {
-    }
   });

@@ -35,7 +35,7 @@ describe('Test validators', () => {
     InputValidator.validateEntryVisibility('').should.be.eql(false);
   });
   it('should return EntryVisibility to be true', () => {
-    InputValidator.validateEntryVisibility('public').should.be.eql(true);
+    InputValidator.validateEntryVisibility('true').should.be.eql(true);
   });
   it('should return ValidateSex to be false', () => {
     InputValidator.validateSex('').should.be.eql(false);
