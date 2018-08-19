@@ -21,7 +21,7 @@ const getPublicEntries = () => {
         paragraph1.innerText = entrytitle.slice(0, 15);
         const paragraph2 = document.createElement('p');
         paragraph2.className = 'description';
-        paragraph2.innerText = entry.slice(0, 15);
+        paragraph2.innerText = entry.slice(0, 40);
         const a = document.createElement('a');
         a.href = `./publicentry.html?entryId=${entriesid}`;
         const button = document.createElement('Button');

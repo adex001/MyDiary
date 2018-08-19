@@ -16,7 +16,7 @@ fetch(`${baseAPI}/entries/public/${entryId}`, {
   .then(response => response.json())
   .then((result) => {
     const date = new Date(result.publicEntry[0].timecreated);
-    article.innerText = result.publicEntry[0].entry;
+    article.innerHTML = result.publicEntry[0].entry;
     entryTitle.innerText = result.publicEntry[0].entrytitle;
     entryDate.innerHTML = date;
   });

@@ -13,5 +13,11 @@ fetch(`${baseAPI}/entries/${entriesId}`, {
 })
   .then(response => response.json())
   .then((resultObject) => {
-    console.log(resultObject);
+    const titleHead = document.getElementById('entrytitle');
+    const entryHead = document.getElementById('entry');
+    const timestampHead = document.getElementById('timestamp');
+    
+    titleHead.innerHTML = resultObject.entry.entrytitle;
+    entryHead.innerHTML = `<p> ${resultObject.entry.entry} </p>`;
+    timestampHead.innerText = resultObject.entry.timecreated;
   });
